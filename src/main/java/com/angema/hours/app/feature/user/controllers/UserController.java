@@ -43,7 +43,7 @@ public class UserController {
     private ResponseEntity<User> save (@Valid @RequestBody User data, BindingResult errorValidation) {
         if (errorValidation.hasErrors())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
         User user = userService.saveUser(data);
         return ResponseEntity.ok().body(user);
