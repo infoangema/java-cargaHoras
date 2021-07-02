@@ -1,7 +1,9 @@
 package com.angema.hours.app.feature.company.controllers;
 
+import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.company.models.Company;
 import com.angema.hours.app.feature.company.services.CompanyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/empresas")
 public class CompanyController {
@@ -28,21 +31,20 @@ public class CompanyController {
     private ResponseEntity<Company> getId (@PathVariable("id") final String id) {
         try {
             Optional<Company> user = companyService.getCompanyId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping()
     private ResponseEntity<Company> save (@Valid @RequestBody Company data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         Company user = companyService.saveCompany(data);
@@ -53,22 +55,21 @@ public class CompanyController {
     private ResponseEntity<Company> delete (@PathVariable("id") final String id) {
         try {
             Optional<Company> user = companyService.getCompanyId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 companyService.deleteCompany(user.get());
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping()
     private ResponseEntity<Company> update (@Valid @RequestBody Company data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         try {

@@ -1,7 +1,9 @@
 package com.angema.hours.app.feature.project.controllers;
 
+import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.project.models.Project;
 import com.angema.hours.app.feature.project.services.ProjectService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/proyectos")
 public class ProjectController {
@@ -28,21 +31,20 @@ public class ProjectController {
     private ResponseEntity<Project> getId (@PathVariable("id") final String id) {
         try {
             Optional<Project> user = projectService.getProjectId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping()
     private ResponseEntity<Project> save (@Valid @RequestBody Project data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         Project user = projectService.saveProject(data);
@@ -53,22 +55,21 @@ public class ProjectController {
     private ResponseEntity<Project> delete (@PathVariable("id") final String id) {
         try {
             Optional<Project> user = projectService.getProjectId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 projectService.deleteProject(user.get());
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping()
     private ResponseEntity<Project> update (@Valid @RequestBody Project data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         try {

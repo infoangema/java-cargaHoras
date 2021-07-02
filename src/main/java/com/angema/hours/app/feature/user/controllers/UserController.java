@@ -1,7 +1,9 @@
 package com.angema.hours.app.feature.user.controllers;
 
+import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.user.services.UserService;
 import com.angema.hours.app.feature.user.models.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/usuarios")
 public class UserController {
@@ -28,21 +31,20 @@ public class UserController {
     private ResponseEntity<User> getId (@PathVariable("id") final String id) {
         try {
             Optional<User> user = userService.getUserId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping()
     private ResponseEntity<User> save (@Valid @RequestBody User data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         User user = userService.saveUser(data);
@@ -53,22 +55,21 @@ public class UserController {
     private ResponseEntity<User> delete (@PathVariable("id") final String id) {
         try {
             Optional<User> user = userService.getUserId(Integer.parseInt(id));
-            if (user.isPresent())
-            {
+            if (user.isPresent()) {
                 userService.deleteUser(user.get());
                 return ResponseEntity.ok().body(user.get());
             } else {
                 return ResponseEntity.noContent().build();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            log.info(Messages.ERROR_IDCHARACTER,id);
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping()
     private ResponseEntity<User> update (@Valid @RequestBody User data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors())
-        {
+        if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
         try {
