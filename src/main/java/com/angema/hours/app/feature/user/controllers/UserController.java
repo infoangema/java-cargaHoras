@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping("/{id}")
     private ResponseEntity<User> getId (@PathVariable("id") final String id) {
         try {
-            Optional<User> user = userService.getUserId(Integer.parseInt(id));
+            Optional<User> user = userService.getUserId(Long.parseLong(id));
             if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
@@ -54,7 +54,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     private ResponseEntity<User> delete (@PathVariable("id") final String id) {
         try {
-            Optional<User> user = userService.getUserId(Integer.parseInt(id));
+            Optional<User> user = userService.getUserId(Long.parseLong(id));
             if (user.isPresent()) {
                 userService.deleteUser(user.get());
                 return ResponseEntity.ok().body(user.get());

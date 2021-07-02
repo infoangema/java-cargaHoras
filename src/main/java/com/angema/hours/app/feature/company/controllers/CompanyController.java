@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/empresas")
+@RequestMapping("/companies")
 public class CompanyController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class CompanyController {
     @GetMapping("/{id}")
     private ResponseEntity<Company> getId (@PathVariable("id") final String id) {
         try {
-            Optional<Company> user = companyService.getCompanyId(Integer.parseInt(id));
+            Optional<Company> user = companyService.getCompanyId(Long.parseLong(id));
             if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
@@ -54,7 +54,7 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     private ResponseEntity<Company> delete (@PathVariable("id") final String id) {
         try {
-            Optional<Company> user = companyService.getCompanyId(Integer.parseInt(id));
+            Optional<Company> user = companyService.getCompanyId(Long.parseLong(id));
             if (user.isPresent()) {
                 companyService.deleteCompany(user.get());
                 return ResponseEntity.ok().body(user.get());

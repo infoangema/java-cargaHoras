@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/proyectos")
+@RequestMapping("/projects")
 public class ProjectController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class ProjectController {
     @GetMapping("/{id}")
     private ResponseEntity<Project> getId (@PathVariable("id") final String id) {
         try {
-            Optional<Project> user = projectService.getProjectId(Integer.parseInt(id));
+            Optional<Project> user = projectService.getProjectId(Long.parseLong(id));
             if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
@@ -54,7 +54,7 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     private ResponseEntity<Project> delete (@PathVariable("id") final String id) {
         try {
-            Optional<Project> user = projectService.getProjectId(Integer.parseInt(id));
+            Optional<Project> user = projectService.getProjectId(Long.parseLong(id));
             if (user.isPresent()) {
                 projectService.deleteProject(user.get());
                 return ResponseEntity.ok().body(user.get());

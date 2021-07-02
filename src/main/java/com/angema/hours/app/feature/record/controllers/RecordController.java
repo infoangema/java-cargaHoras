@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/registros")
+@RequestMapping("/records")
 public class RecordController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class RecordController {
     @GetMapping("/{id}")
     private ResponseEntity<Record> getId (@PathVariable("id") final String id) {
         try {
-            Optional<Record> user = recordService.getRecordId(Integer.parseInt(id));
+            Optional<Record> user = recordService.getRecordId(Long.parseLong(id));
             if (user.isPresent()) {
                 return ResponseEntity.ok().body(user.get());
             } else {
@@ -54,7 +54,7 @@ public class RecordController {
     @DeleteMapping("/{id}")
     private ResponseEntity<Record> delete (@PathVariable("id") final String id) {
         try {
-            Optional<Record> user = recordService.getRecordId(Integer.parseInt(id));
+            Optional<Record> user = recordService.getRecordId(Long.parseLong(id));
             if (user.isPresent()) {
                 recordService.deleteRecord(user.get());
                 return ResponseEntity.ok().body(user.get());
