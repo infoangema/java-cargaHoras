@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -22,20 +20,17 @@ public class Record implements Serializable {
     private int id;
 
     @NotBlank
-    private LocalDate date;
+    private String date;
 
     @NotBlank
-    @Positive
-    private int hours;
+    private String hours;
 
     @NotBlank
     private String description;
 
     @NotBlank
-    @Positive
-    private int idUser;
+    private String idUser;
 
     @NotBlank
-    @Positive
-    private int idProject;
+    private String idProject;
 }

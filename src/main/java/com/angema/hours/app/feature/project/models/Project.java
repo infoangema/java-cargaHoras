@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
@@ -27,6 +28,5 @@ public class Project implements Serializable {
     private String description;
 
     @NotBlank
-    @Positive
-    private int idCompany;
+    private String idCompany;
 }
