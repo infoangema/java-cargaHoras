@@ -22,28 +22,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping()
-    private ResponseEntity<List<User>> getAll () {
+    private ResponseEntity<List<User>> getAll() {
         List<User> user = userService.getAllUser();
         return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<User> getId (@PathVariable("id") final String id) {
-        try {
-            Optional<User> user = userService.getUserId(Long.parseLong(id));
-            if (user.isPresent()) {
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<User> getId(@PathVariable("id") Long id) {
+        User user = userService.getUserId(id);
+        return ResponseEntity.ok().body(user);
     }
 
     @PostMapping()
-    private ResponseEntity<User> save (@Valid @RequestBody User data, BindingResult errorValidation) {
+    private ResponseEntity<User> save(@Valid @RequestBody User data, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
@@ -52,36 +43,19 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<User> delete (@PathVariable("id") final String id) {
-        try {
-            Optional<User> user = userService.getUserId(Long.parseLong(id));
-            if (user.isPresent()) {
-                userService.deleteUser(user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<User> delete(@PathVariable("id") Long id) {
+        User user = userService.getUserId(id);
+        userService.deleteUser(user);
+        return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping()
-    private ResponseEntity<User> update (@Valid @RequestBody User data, BindingResult errorValidation) {
+    @PutMapping("/{id}")
+    private ResponseEntity<User> update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        try {
-            Optional<User> user = userService.getUserId(data.getId());
-            if (user.isPresent()) {
-                userService.updateUser(data,user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        userService.getUserId(id);
+        User userUpdated = userService.saveUser(data);
+        return ResponseEntity.ok().body(userUpdated);
     }
 }

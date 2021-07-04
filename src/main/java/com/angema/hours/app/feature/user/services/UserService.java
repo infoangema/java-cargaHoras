@@ -1,13 +1,19 @@
 package com.angema.hours.app.feature.user.services;
 
+import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.user.models.User;
 import com.angema.hours.app.feature.user.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -18,8 +24,14 @@ public class UserService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<User> getUserId (final Long id) {
-        return usuarioRepository.findById(id);
+    public User getUserId (final Long id) {
+            Optional<User> user = usuarioRepository.findById(id);
+            if (user.isPresent()) {
+                return user.get();
+            } else {
+                log.info(Messages.ERROR_USER_NOT_FOUND,id);
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND );
+            }
     }
 
     public User saveUser (User data) {
@@ -27,15 +39,10 @@ public class UserService {
     }
 
     public void deleteUser (User user) {
-        usuarioRepository.delete(user);
-    }
-
-    public void updateUser (User data, User user) {
-        user.setMail(data.getMail());
-        user.setPassword(data.getPassword());
-        user.setName(data.getName());
-        user.setSurname(data.getSurname());
-        user.setPhone(data.getPhone());
-        usuarioRepository.save(user);
+        try {
+            usuarioRepository.delete(user);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error al intentar borrar el usuario", e );
+        }
     }
 }
