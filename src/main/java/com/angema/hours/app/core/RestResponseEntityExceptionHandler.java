@@ -22,7 +22,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 ex,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.valueOf(404),
+                HttpStatus.valueOf(status),
                 request
         );
     }

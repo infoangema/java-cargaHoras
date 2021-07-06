@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.user.controllers;
 
-import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.user.services.UserService;
 import com.angema.hours.app.feature.user.models.User;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
