@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.company.controllers;
 
-import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.company.models.Company;
 import com.angema.hours.app.feature.company.services.CompanyService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -22,66 +20,44 @@ public class CompanyController {
     private CompanyService companyService;
 
     @GetMapping()
-    private ResponseEntity<List<Company>> getAll () {
-        List<Company> user = companyService.getAllCompany();
-        return ResponseEntity.ok().body(user);
+    private ResponseEntity<List<Company>> getAll() {
+        List<Company> company = companyService.getAllCompany();
+        return ResponseEntity.ok().body(company);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Company> getId (@PathVariable("id") final String id) {
-        try {
-            Optional<Company> user = companyService.getCompanyId(Long.parseLong(id));
-            if (user.isPresent()) {
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Company> getId(@PathVariable("id") Long id) {
+        Company company = companyService.getIdCompany(id);
+        return ResponseEntity.ok().body(company);
     }
 
     @PostMapping()
-    private ResponseEntity<Company> save (@Valid @RequestBody Company data, BindingResult errorValidation) {
+    private ResponseEntity<Company> save(@Valid @RequestBody Company data, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        Company user = companyService.saveCompany(data);
-        return ResponseEntity.ok().body(user);
+        Company company = companyService.saveCompany(data);
+        return ResponseEntity.ok().body(company);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Company> delete (@PathVariable("id") final String id) {
-        try {
-            Optional<Company> user = companyService.getCompanyId(Long.parseLong(id));
-            if (user.isPresent()) {
-                companyService.deleteCompany(user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Company> delete(@PathVariable("id") Long id) {
+        Company company = companyService.getIdCompany(id);
+        companyService.deleteCompany(company);
+        return ResponseEntity.ok().body(company);
     }
 
-    @PutMapping()
-    private ResponseEntity<Company> update (@Valid @RequestBody Company data, BindingResult errorValidation) {
+    @PutMapping("/{id}")
+    private ResponseEntity<Company> update(@Valid @RequestBody Company data, @PathVariable("id") Long id, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        try {
-            Optional<Company> user = companyService.getCompanyId(data.getId());
-            if (user.isPresent()) {
-                companyService.updateCompany(data,user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Company company = companyService.getIdCompany(id);
+        company.setName(data.getName());
+        company.setDescription(data.getDescription());
+        company.setCuit(data.getCuit());
+        company.setDirection(data.getDirection());
+        Company userUpdated = companyService.saveCompany(company);
+        return ResponseEntity.ok().body(userUpdated);
     }
 }

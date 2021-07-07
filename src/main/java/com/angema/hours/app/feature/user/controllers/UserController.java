@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     private ResponseEntity<User> getId(@PathVariable("id") Long id) {
-        User user = userService.getUserId(id);
+        User user = userService.getIdUser(id);
         return ResponseEntity.ok().body(user);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity<User> delete(@PathVariable("id") Long id) {
-        User user = userService.getUserId(id);
+        User user = userService.getIdUser(id);
         userService.deleteUser(user);
         return ResponseEntity.ok().body(user);
     }
@@ -52,8 +52,13 @@ public class UserController {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        userService.getUserId(id);
-        User userUpdated = userService.saveUser(data);
+        User user = userService.getIdUser(id);
+        user.setMail(data.getMail());
+        user.setPassword(data.getPassword());
+        user.setName(data.getName());
+        user.setSurname(data.getSurname());
+        user.setPhone(data.getPhone());
+        User userUpdated = userService.saveUser(user);
         return ResponseEntity.ok().body(userUpdated);
     }
 }

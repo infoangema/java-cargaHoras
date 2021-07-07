@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.record.controllers;
 
-import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.feature.record.models.Record;
 import com.angema.hours.app.feature.record.services.RecordService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -22,66 +20,45 @@ public class RecordController {
     private RecordService recordService;
 
     @GetMapping()
-    private ResponseEntity<List<Record>> getAll () {
-        List<Record> user = recordService.getAllRecord();
-        return ResponseEntity.ok().body(user);
+    private ResponseEntity<List<Record>> getAll() {
+        List<Record> record = recordService.getAllRecord();
+        return ResponseEntity.ok().body(record);
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Record> getId (@PathVariable("id") final String id) {
-        try {
-            Optional<Record> user = recordService.getRecordId(Long.parseLong(id));
-            if (user.isPresent()) {
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Record> getId(@PathVariable("id") Long id) {
+        Record record = recordService.getIdRecord(id);
+        return ResponseEntity.ok().body(record);
     }
 
     @PostMapping()
-    private ResponseEntity<Record> save (@Valid @RequestBody Record data, BindingResult errorValidation) {
+    private ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        Record user = recordService.saveRecord(data);
-        return ResponseEntity.ok().body(user);
+        Record record = recordService.saveRecord(data);
+        return ResponseEntity.ok().body(record);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Record> delete (@PathVariable("id") final String id) {
-        try {
-            Optional<Record> user = recordService.getRecordId(Long.parseLong(id));
-            if (user.isPresent()) {
-                recordService.deleteRecord(user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (NumberFormatException e) {
-            log.info(Messages.ERROR_IDCHARACTER,id);
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Record> delete(@PathVariable("id") Long id) {
+        Record record = recordService.getIdRecord(id);
+        recordService.deleteRecord(record);
+        return ResponseEntity.ok().body(record);
     }
 
-    @PutMapping()
-    private ResponseEntity<Record> update (@Valid @RequestBody Record data, BindingResult errorValidation) {
+    @PutMapping("/{id}")
+    private ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult errorValidation) {
         if (errorValidation.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        try {
-            Optional<Record> user = recordService.getRecordId(data.getId());
-            if (user.isPresent()) {
-                recordService.updateRecord(data,user.get());
-                return ResponseEntity.ok().body(user.get());
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Record record = recordService.getIdRecord(id);
+        record.setDate(data.getDate());
+        record.setHours(data.getHours());
+        record.setDescription(data.getDescription());
+        record.setIdUser(data.getIdUser());
+        record.setIdProject(data.getIdProject());
+        Record recordUpdate = recordService.saveRecord(record);
+        return ResponseEntity.ok().body(recordUpdate);
     }
 }
