@@ -1,5 +1,6 @@
 package com.angema.hours.app.feature.project.models;
 
+import com.angema.hours.app.feature.company.models.Company;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class Project implements Serializable {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private String idCompany;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_company")
+    private Company company;
 }

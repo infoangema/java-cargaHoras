@@ -1,5 +1,6 @@
 package com.angema.hours.app.feature.user.controllers;
 
+import com.angema.hours.app.core.errors.ErrorService;
 import com.angema.hours.app.feature.user.services.UserService;
 import com.angema.hours.app.feature.user.models.User;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ErrorService errorService;
+
     @GetMapping()
     private ResponseEntity<List<User>> getAll() {
         List<User> user = userService.getAllUser();
@@ -32,10 +36,8 @@ public class UserController {
     }
 
     @PostMapping()
-    private ResponseEntity<User> save(@Valid @RequestBody User data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<User> save(@Valid @RequestBody User data, BindingResult bindingResult) {
+        errorService.collectErrorsBindings(bindingResult);
         User user = userService.saveUser(data);
         return ResponseEntity.ok().body(user);
     }
@@ -48,10 +50,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<User> update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult errorValidation) {
-        if (errorValidation.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<User> update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
+        errorService.collectErrorsBindings(bindingResult);
         User user = userService.getIdUser(id);
         user.setMail(data.getMail());
         user.setPassword(data.getPassword());

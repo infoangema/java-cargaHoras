@@ -20,7 +20,11 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     public List<Company> getAllCompany() {
-        return companyRepository.findAll();
+        Optional<List<Company>> list = Optional.ofNullable(companyRepository.findAll());
+        if(!list.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error en la busqueda de los usuarios");
+        }
+        return list.get();
     }
 
     public Company getIdCompany(final Long id) {
@@ -28,7 +32,6 @@ public class CompanyService {
         if (company.isPresent()) {
             return company.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
         }
     }

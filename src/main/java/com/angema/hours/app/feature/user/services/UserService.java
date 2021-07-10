@@ -28,7 +28,6 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
         }
     }

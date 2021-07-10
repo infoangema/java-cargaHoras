@@ -1,5 +1,6 @@
 package com.angema.hours.app.feature.user.models;
 
+import com.angema.hours.app.core.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -22,6 +24,7 @@ public class User implements Serializable {
 
     @Email
     @NotBlank
+    @Size(min = 8, max = 30, message = Messages.ERROR_MAIL)
     private String mail;
 
     @NotBlank

@@ -55,7 +55,7 @@ public class ProjectController {
         Project project = projectService.getIdProject(id);
         project.setName(data.getName());
         project.setDescription(data.getDescription());
-        project.setIdCompany(data.getIdCompany());
+        project.setCompany(data.getCompany());
         Project userUpdated = projectService.saveUser(project);
         return ResponseEntity.ok().body(userUpdated);
     }

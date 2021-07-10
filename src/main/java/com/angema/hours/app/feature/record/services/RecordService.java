@@ -28,7 +28,6 @@ public class RecordService {
         if (record.isPresent()) {
             return record.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
         }
     }
