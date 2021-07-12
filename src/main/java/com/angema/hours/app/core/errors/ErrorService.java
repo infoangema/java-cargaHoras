@@ -1,5 +1,6 @@
 package com.angema.hours.app.core.errors;
 
+import com.angema.hours.app.core.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,7 @@ public class ErrorService {
                 }
                 if(object instanceof ObjectError) {
                     ObjectError objectError = (ObjectError) object;
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error al validar los datos de entrada");
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_DATA_VALIDATION);
                 }
             }
         }

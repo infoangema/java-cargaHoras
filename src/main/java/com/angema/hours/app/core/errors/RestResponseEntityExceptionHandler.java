@@ -19,16 +19,17 @@ import java.time.format.DateTimeFormatter;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value= {Exception.class, IllegalStateException.class})
-    protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleConflict(ResponseStatusException ex, WebRequest request) {
 
-        Integer status = ((ResponseStatusException) ex).getRawStatusCode();
+        Integer status = ex.getRawStatusCode();
         Error err = new Error();
-        err.message = ((ResponseStatusException) ex).getReason();
+        err.message = ex.getReason();
         err.status = String.valueOf(status);
         err.path = ((ServletWebRequest)request).getRequest().getRequestURI().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         err.timestamp = LocalDateTime.now().format(formatter);
         log.error(">>> " + err.toString());
+
         return handleExceptionInternal(
                 ex,
                 err,

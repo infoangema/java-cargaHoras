@@ -1,5 +1,6 @@
 package com.angema.hours.app.feature.user.models;
 
+import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,20 +23,24 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
-    @NotBlank
-    @Size(min = 8, max = 30, message = Messages.ERROR_MAIL)
+    @Email(message = Messages.ERROR_FORMAT_MAIL)
+    @NotBlank(message = Messages.ERROR_NULL_MAIL)
+    @Size(min = Constant.MIN_CHARACTER_MAIL, max = Constant.MAX_CHARACTER_MAIL, message = Messages.ERROR_MAIL)
     private String mail;
 
-    @NotBlank
+    @Size(min = Constant.MIN_CHARACTER_PASSWORD, max = Constant.MAX_CHARACTER_PASSWORD, message = Messages.ERROR_PASSWORD)
+    @NotBlank(message = Messages.ERROR_NULL_PASSWORD)
     private String password;
 
-    @NotBlank
+    @Size(min = Constant.MIN_CHARACTER_NAME, max = Constant.MAX_CHARACTER_NAME, message = Messages.ERROR_NAME)
+    @NotBlank(message = Messages.ERROR_NULL_NAME)
     private String name;
 
-    @NotBlank
+    @Size(min = Constant.MIN_CHARACTER_SURNAME, max = Constant.MAX_CHARACTER_SURNAME, message = Messages.ERROR_SURNAME)
+    @NotBlank(message = Messages.ERROR_NULL_SURNAME)
     private String surname;
 
-    @NotBlank
+    @Size(min = Constant.MIN_CHARACTER_PHONE, max = Constant.MAX_CHARACTER_PHONE, message = Messages.ERROR_PHONE)
+    @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
 }

@@ -17,14 +17,18 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository usuarioRepository;
+    private UserRepository userRepository;
 
     public List<User> getAllUser() {
-        return usuarioRepository.findAll();
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public User getIdUser(final Long id) {
-        Optional<User> user = usuarioRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -33,12 +37,16 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        return usuarioRepository.save(user);
+        try {
+        return userRepository.save(user);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public void deleteUser(User user) {
         try {
-            usuarioRepository.delete(user);
+            userRepository.delete(user);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND, e);
         }
