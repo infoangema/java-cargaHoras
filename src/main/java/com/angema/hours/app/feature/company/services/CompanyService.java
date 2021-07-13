@@ -20,7 +20,11 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     public List<Company> getAllCompany() {
-        return companyRepository.findAll();
+        try {
+            return companyRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public Company getIdCompany(final Long id) {
@@ -28,20 +32,23 @@ public class CompanyService {
         if (company.isPresent()) {
             return company.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_COMPANY_NOT_FOUND);
         }
     }
 
     public Company saveCompany(Company company) {
-        return companyRepository.save(company);
+        try {
+            return companyRepository.save(company);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public void deleteCompany(Company company) {
         try {
             companyRepository.delete(company);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND, e);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_COMPANY_NOT_FOUND, e);
         }
     }
 }

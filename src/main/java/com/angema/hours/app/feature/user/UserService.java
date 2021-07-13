@@ -1,8 +1,8 @@
-package com.angema.hours.app.feature.user.services;
+package com.angema.hours.app.feature.user;
 
 import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.user.models.User;
-import com.angema.hours.app.feature.user.repositories.UserRepository;
+import com.angema.hours.app.feature.user.User;
+import com.angema.hours.app.feature.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,29 +17,36 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository usuarioRepository;
+    private UserRepository userRepository;
 
     public List<User> getAllUser() {
-        return usuarioRepository.findAll();
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public User getIdUser(final Long id) {
-        Optional<User> user = usuarioRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
         }
     }
 
     public User saveUser(User user) {
-        return usuarioRepository.save(user);
+        try {
+        return userRepository.save(user);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public void deleteUser(User user) {
         try {
-            usuarioRepository.delete(user);
+            userRepository.delete(user);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND, e);
         }

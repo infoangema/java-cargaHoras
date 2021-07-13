@@ -20,7 +20,11 @@ public class RecordService {
     private RecordRepository recordRepository;
 
     public List<Record> getAllRecord() {
-        return recordRepository.findAll();
+        try {
+            return recordRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public Record getIdRecord(final Long id) {
@@ -28,20 +32,23 @@ public class RecordService {
         if (record.isPresent()) {
             return record.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND);
         }
     }
 
     public Record saveRecord(Record record) {
-        return recordRepository.save(record);
+        try {
+            return recordRepository.save(record);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public void deleteRecord(Record record) {
         try {
             recordRepository.delete(record);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND, e);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND, e);
         }
     }
 }

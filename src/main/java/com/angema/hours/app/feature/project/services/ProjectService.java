@@ -20,7 +20,11 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     public List<Project> getAllProject() {
-        return projectRepository.findAll();
+        try {
+            return projectRepository.findAll();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
     public Project getIdProject(final Long id) {
@@ -28,20 +32,23 @@ public class ProjectService {
         if (project.isPresent()) {
             return project.get();
         } else {
-            log.info(Messages.ERROR_USER_NOT_FOUND, id);
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND);
         }
     }
 
-    public Project saveUser(Project project) {
-        return projectRepository.save(project);
+    public Project saveProject(Project project) {
+        try {
+            return projectRepository.save(project);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 
-    public void deleteUser(Project project) {
+    public void deleteProject(Project project) {
         try {
             projectRepository.delete(project);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND, e);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND, e);
         }
     }
 }

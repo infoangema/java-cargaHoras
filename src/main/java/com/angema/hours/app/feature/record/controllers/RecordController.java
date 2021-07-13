@@ -1,5 +1,6 @@
 package com.angema.hours.app.feature.record.controllers;
 
+import com.angema.hours.app.core.errors.ErrorService;
 import com.angema.hours.app.feature.record.models.Record;
 import com.angema.hours.app.feature.record.services.RecordService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,9 @@ public class RecordController {
     @Autowired
     private RecordService recordService;
 
+    @Autowired
+    private ErrorService errorService;
+
     @GetMapping()
     private ResponseEntity<List<Record>> getAll() {
         List<Record> record = recordService.getAllRecord();
@@ -32,10 +36,8 @@ public class RecordController {
     }
 
     @PostMapping()
-    private ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult errorValidation) {
-        if (errorValidation.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult bindingResult) {
+        errorService.collectErrorsBindings(bindingResult);
         Record record = recordService.saveRecord(data);
         return ResponseEntity.ok().body(record);
     }
@@ -48,17 +50,15 @@ public class RecordController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult errorValidation) {
-        if (errorValidation.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    private ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
+        errorService.collectErrorsBindings(bindingResult);
         Record record = recordService.getIdRecord(id);
         record.setDate(data.getDate());
         record.setHours(data.getHours());
         record.setDescription(data.getDescription());
-        record.setIdUser(data.getIdUser());
-        record.setIdProject(data.getIdProject());
-        Record recordUpdate = recordService.saveRecord(record);
-        return ResponseEntity.ok().body(recordUpdate);
+        record.setUser(data.getUser());
+        record.setProject(data.getProject());
+        Record userUpdated = recordService.saveRecord(record);
+        return ResponseEntity.ok().body(userUpdated);
     }
 }
