@@ -1,11 +1,11 @@
 package com.angema.hours.app.core.errors;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,24 +18,18 @@ import java.time.format.DateTimeFormatter;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value= {Exception.class, IllegalStateException.class})
-    protected ResponseEntity<Object> handleConflict(ResponseStatusException ex, WebRequest request) {
+    protected Object handleConflict(ResponseStatusException ex, WebRequest request) {
 
-        Integer status = ex.getRawStatusCode();
         Error err = new Error();
-        err.message = ex.getReason();
-        err.status = String.valueOf(status);
+        err.message.add(ex.getReason());
+        err.status = String.valueOf(ex.getRawStatusCode());
         err.path = ((ServletWebRequest)request).getRequest().getRequestURI().toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         err.timestamp = LocalDateTime.now().format(formatter);
         log.error(">>> " + err.toString());
-
-        return handleExceptionInternal(
-                ex,
-                err,
-                new HttpHeaders(),
-                HttpStatus.valueOf(400),
-                request
-        );
+        return err;
     }
 }

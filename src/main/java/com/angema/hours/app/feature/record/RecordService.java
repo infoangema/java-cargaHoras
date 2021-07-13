@@ -1,8 +1,10 @@
-package com.angema.hours.app.feature.record.services;
+package com.angema.hours.app.feature.record;
 
 import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.record.models.Record;
-import com.angema.hours.app.feature.record.repositories.RecordRepository;
+import com.angema.hours.app.feature.project.Project;
+import com.angema.hours.app.feature.project.ProjectRepository;
+import com.angema.hours.app.feature.user.User;
+import com.angema.hours.app.feature.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,12 @@ public class RecordService {
 
     @Autowired
     private RecordRepository recordRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public List<Record> getAllRecord() {
         try {
@@ -37,8 +45,19 @@ public class RecordService {
     }
 
     public Record saveRecord(Record record) {
+        Optional<User> dataUser = userRepository.findById(record.getUser().getId());
+        if (!dataUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_NOT_EXISTS_USER);
+        }
+        Optional<Project> dataProject = projectRepository.findById(record.getProject().getId());
+        if (!dataProject.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_NOT_EXISTS_PROJECT);
+        }
         try {
-            return recordRepository.save(record);
+            recordRepository.save(record);
+            record.setUser(dataUser.get());
+            record.setProject(dataProject.get());
+            return record;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }

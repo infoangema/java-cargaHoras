@@ -10,7 +10,7 @@ public class Constant {
     public static final int MIN_CHARACTER_DESCRIPTION = 5;
     public static final int MIN_CHARACTER_CUIT = 4;
     public static final int MIN_CHARACTER_DIRECTION = 6;
-    public static final int MIN_CHARACTER_HOURS = 1;
+    public static final int MIN_VALUE_HOURS = 1;
 
     public static final int MAX_CHARACTER_MAIL = 30;
     public static final int MAX_CHARACTER_PASSWORD = 15;
@@ -20,5 +20,5 @@ public class Constant {
     public static final int MAX_CHARACTER_DESCRIPTION = 250;
     public static final int MAX_CHARACTER_CUIT = 15;
     public static final int MAX_CHARACTER_DIRECTION = 50;
-    public static final int MAX_CHARACTER_HOURS = 2;
+    public static final int MAX_VALUE_HOURS = 24;
 }

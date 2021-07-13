@@ -1,11 +1,9 @@
-package com.angema.hours.app.feature.record.controllers;
+package com.angema.hours.app.feature.record;
 
 import com.angema.hours.app.core.errors.ErrorService;
-import com.angema.hours.app.feature.record.models.Record;
-import com.angema.hours.app.feature.record.services.RecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,34 +21,41 @@ public class RecordController {
     @Autowired
     private ErrorService errorService;
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    private ResponseEntity<List<Record>> getAll() {
-        List<Record> record = recordService.getAllRecord();
-        return ResponseEntity.ok().body(record);
+    private List<Record> getAll() {
+        return recordService.getAllRecord();
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    private ResponseEntity<Record> getId(@PathVariable("id") Long id) {
-        Record record = recordService.getIdRecord(id);
-        return ResponseEntity.ok().body(record);
+    private Record getId(@PathVariable("id") Long id) {
+        return recordService.getIdRecord(id);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    private ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult bindingResult) {
+    private Record save(@Valid @RequestBody Record data, BindingResult bindingResult) {
         errorService.collectErrorsBindings(bindingResult);
-        Record record = recordService.saveRecord(data);
-        return ResponseEntity.ok().body(record);
+        return recordService.saveRecord(data);
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    private ResponseEntity<Record> delete(@PathVariable("id") Long id) {
+    private Record delete(@PathVariable("id") Long id) {
         Record record = recordService.getIdRecord(id);
         recordService.deleteRecord(record);
-        return ResponseEntity.ok().body(record);
+        return record;
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    private ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    private Record update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
         errorService.collectErrorsBindings(bindingResult);
         Record record = recordService.getIdRecord(id);
         record.setDate(data.getDate());
@@ -58,7 +63,6 @@ public class RecordController {
         record.setDescription(data.getDescription());
         record.setUser(data.getUser());
         record.setProject(data.getProject());
-        Record userUpdated = recordService.saveRecord(record);
-        return ResponseEntity.ok().body(userUpdated);
+        return recordService.saveRecord(record);
     }
 }

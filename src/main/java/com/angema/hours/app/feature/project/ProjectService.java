@@ -1,8 +1,9 @@
-package com.angema.hours.app.feature.project.services;
+package com.angema.hours.app.feature.project;
 
 import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.project.models.Project;
-import com.angema.hours.app.feature.project.repositories.ProjectRepository;
+import com.angema.hours.app.feature.company.Company;
+import com.angema.hours.app.feature.company.CompanyRepository;
+import com.angema.hours.app.feature.company.CompanyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public List<Project> getAllProject() {
         try {
@@ -37,8 +41,14 @@ public class ProjectService {
     }
 
     public Project saveProject(Project project) {
+        Optional<Company> dataCompany = companyRepository.findById(project.getCompany().getId());
+        if (!dataCompany.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_NOT_EXISTS_COMPANY);
+        }
         try {
-            return projectRepository.save(project);
+            projectRepository.save(project);
+            project.setCompany(dataCompany.get());
+            return project;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
