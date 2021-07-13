@@ -14,11 +14,11 @@ public class Constant {
 
     public static final int MAX_CHARACTER_MAIL = 30;
     public static final int MAX_CHARACTER_PASSWORD = 15;
-    public static final int MAX_CHARACTER_NAME = 12;
-    public static final int MAX_CHARACTER_SURNAME = 12;
+    public static final int MAX_CHARACTER_NAME = 30;
+    public static final int MAX_CHARACTER_SURNAME = 30;
     public static final int MAX_CHARACTER_PHONE = 15;
     public static final int MAX_CHARACTER_DESCRIPTION = 250;
     public static final int MAX_CHARACTER_CUIT = 15;
-    public static final int MAX_CHARACTER_DIRECTION = 12;
+    public static final int MAX_CHARACTER_DIRECTION = 50;
     public static final int MAX_CHARACTER_HOURS = 2;
 }

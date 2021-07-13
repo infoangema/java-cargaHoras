@@ -31,8 +31,7 @@ public class Project implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
-    @NotBlank(message = Messages.ERROR_NULL_COMPANY)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_company")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_id")
     private Company company;
 }

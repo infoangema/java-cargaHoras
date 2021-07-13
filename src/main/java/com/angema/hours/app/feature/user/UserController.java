@@ -1,10 +1,9 @@
-package com.angema.hours.app.feature.user.controllers;
+package com.angema.hours.app.feature.user;
 
 import com.angema.hours.app.core.errors.ErrorService;
-import com.angema.hours.app.feature.user.services.UserService;
-import com.angema.hours.app.feature.user.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,27 +29,33 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<User> getId(@PathVariable("id") Long id) {
-        User user = userService.getIdUser(id);
-        return ResponseEntity.ok().body(user);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    private User getId(@PathVariable("id") Long id) {
+        return userService.getIdUser(id);
     }
 
     @PostMapping()
-    private ResponseEntity<User> save(@Valid @RequestBody User data, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    private User save(@Valid @RequestBody User data, BindingResult bindingResult) {
         errorService.collectErrorsBindings(bindingResult);
-        User user = userService.saveUser(data);
-        return ResponseEntity.ok().body(user);
+        return userService.saveUser(data);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<User> delete(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseBody
+    private String delete(@PathVariable("id") Long id) {
         User user = userService.getIdUser(id);
         userService.deleteUser(user);
-        return ResponseEntity.ok().body(user);
+        return "DELETE";
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<User> update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    private User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
         errorService.collectErrorsBindings(bindingResult);
         User user = userService.getIdUser(id);
         user.setMail(data.getMail());
@@ -58,7 +63,6 @@ public class UserController {
         user.setName(data.getName());
         user.setSurname(data.getSurname());
         user.setPhone(data.getPhone());
-        User userUpdated = userService.saveUser(user);
-        return ResponseEntity.ok().body(userUpdated);
+        return userService.saveUser(user);
     }
 }
