@@ -4,6 +4,7 @@ import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.core.errors.ErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -37,17 +38,17 @@ public class UserService {
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_SERVER);
             }
             return user.get();
-        } catch (Exception e) {
+        } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
 
     public User saveUser(User user, BindingResult bindingResult) {
+        List<String> errors = errorService.collectErrorsBindings(bindingResult);
+        if (!errors.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_SERVER);
+        }
         try {
-            List<String> errors = errorService.collectErrorsBindings(bindingResult);
-            if (!errors.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_SERVER);
-            }
             return userRepository.save(user);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
@@ -81,6 +82,10 @@ public class UserService {
         user.get().setName(data.getName());
         user.get().setSurname(data.getSurname());
         user.get().setPhone(data.getPhone());
-        return user.get();
+        try {
+            return userRepository.save(user.get());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 }

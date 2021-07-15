@@ -23,7 +23,7 @@ public class ErrorService {
         err.status = status.toString();
         err.path = path;
         err.message.add(errors);
-        err.object = obj;
+        //err.object = obj;
         log.error(">>> " + err.toString());
         return err;
     }
@@ -35,7 +35,7 @@ public class ErrorService {
         err.status = status.toString();
         err.path = path;
         err.message = errors;
-        err.object = obj;
+        //err.object = obj;
         log.error(">>> " + err.toString());
         return err;
     }
