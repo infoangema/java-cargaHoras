@@ -2,14 +2,16 @@ package com.angema.hours.app.core.errors;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Error {
+public class Error implements Serializable {
 
-    public String status;
-    public List<String> message;
-    public String path;
     public String timestamp;
+    public String status;
+    public String path;
+    public List<String> message;
+    public Object object;
 
     @Override
     public String toString(){

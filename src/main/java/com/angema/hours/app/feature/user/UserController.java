@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.user;
 
-import com.angema.hours.app.core.errors.ErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ErrorService errorService;
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -39,30 +35,20 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     private User save(@Valid @RequestBody User data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        return userService.saveUser(data);
+        return userService.saveUser(data, bindingResult);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     private User delete(@PathVariable("id") Long id) {
-        User user = userService.getIdUser(id);
-        userService.deleteUser(user);
-        return user;
+        return userService.deleteUser(id);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     private User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        User user = userService.getIdUser(id);
-        user.setMail(data.getMail());
-        user.setPassword(data.getPassword());
-        user.setName(data.getName());
-        user.setSurname(data.getSurname());
-        user.setPhone(data.getPhone());
-        return userService.saveUser(user);
+        return userService.updateUser(data, id, bindingResult);
     }
 }
