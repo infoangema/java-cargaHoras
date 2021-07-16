@@ -48,7 +48,7 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    private User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    private User update(@PathVariable("id") Long id, @Valid @RequestBody User data, BindingResult bindingResult) {
         return userService.updateUser(data, id, bindingResult);
     }
 }

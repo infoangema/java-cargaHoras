@@ -13,28 +13,28 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Arrays;
 
 @Slf4j
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value= {Exception.class, IllegalStateException.class})
-    protected ResponseEntity<Object> handleConflict(ResponseStatusException ex, WebRequest request, List<String> list) {
+    protected ResponseEntity<Object> handleConflict(ResponseStatusException ex, WebRequest request) {
 
         Error err = new Error();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         err.timestamp = LocalDateTime.now().format(formatter);
-        err.status = String.valueOf(ex.getRawStatusCode());
+        err.status = String.valueOf(ex.getStatus());
         err.path = ((ServletWebRequest)request).getRequest().getRequestURI().toString();
-        err.message.add("");
+        err.message = Arrays.asList(ex.getReason().replaceAll("[\\[\\]]+","").split(","));
         log.error(">>> " + err.toString());
 
         return handleExceptionInternal(
                 ex,
                 err,
                 new HttpHeaders(),
-                HttpStatus.valueOf(ex.getRawStatusCode()),
+                HttpStatus.valueOf(ex.getStatus().value()),
                 request
         );
     }

@@ -12,7 +12,6 @@ public class Error implements Serializable {
     public String status;
     public String path;
     public List<String> message = new ArrayList<String>();
-    //public Object object;
 
     @Override
     public String toString(){

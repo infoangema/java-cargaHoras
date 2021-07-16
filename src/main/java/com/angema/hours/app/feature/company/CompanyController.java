@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.company;
 
-import com.angema.hours.app.core.errors.ErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
-
-    @Autowired
-    private ErrorService errorService;
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -39,29 +35,20 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     private Company save(@Valid @RequestBody Company data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        return companyService.saveCompany(data);
+        return companyService.saveCompany(data, bindingResult);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     private Company delete(@PathVariable("id") Long id) {
-        Company company = companyService.getIdCompany(id);
-        companyService.deleteCompany(company);
-        return company;
+        return companyService.deleteCompany(id);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    private Company update(@Valid @RequestBody Company data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        Company company = companyService.getIdCompany(id);
-        company.setName(data.getName());
-        company.setDescription(data.getDescription());
-        company.setCuit(data.getCuit());
-        company.setDirection(data.getDirection());
-        return companyService.saveCompany(company);
+    private Company update(@PathVariable("id") Long id, @Valid @RequestBody Company data, BindingResult bindingResult) {
+        return companyService.updateCompany(data, id, bindingResult);
     }
 }

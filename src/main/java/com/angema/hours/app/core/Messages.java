@@ -7,7 +7,6 @@ public class Messages {
     public static final String ERROR_PROJECT_NOT_FOUND = "Proyecto no encontrado.";
     public static final String ERROR_COMPANY_NOT_FOUND = "Empresa no encontrado.";
     public static final String ERROR_SERVER = "El servidor no se encuentra disponible en este momento.";
-    public static final String ERROR_DATA_VALIDATION = "Error al validar el objeto de entrada";
     public static final String ERROR_FORMAT_MAIL = "El formato del campo mail es incorrecto.";
     public static final String ERROR_NOT_EXISTS_COMPANY = "El registro company con el ID ingresado no existe.";
     public static final String ERROR_NOT_EXISTS_USER = "El registro user con el ID ingresado no existe.";

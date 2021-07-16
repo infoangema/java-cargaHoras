@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class UserService {
     public List<User> getAllUser() {
         try {
             return userRepository.findAll();
-        } catch (Exception e) {
+        } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
@@ -35,7 +36,7 @@ public class UserService {
         try {
             Optional<User> user = userRepository.findById(id);
             if (!user.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_SERVER);
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
             }
             return user.get();
         } catch (InvalidDataAccessResourceUsageException e) {
@@ -44,13 +45,13 @@ public class UserService {
     }
 
     public User saveUser(User user, BindingResult bindingResult) {
-        List<String> errors = errorService.collectErrorsBindings(bindingResult);
-        if (!errors.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_SERVER);
-        }
         try {
-            return userRepository.save(user);
-        } catch (Exception e) {
+            List<String> errors = errorService.collectErrorsBindings(bindingResult);
+            if (!errors.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
+            }
+                return userRepository.save(user);
+        } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
@@ -59,32 +60,32 @@ public class UserService {
         try {
             Optional<User> user = userRepository.findById(id);
             if (!user.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_SERVER);
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
             }
             userRepository.delete(user.get());
             return user.get();
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_USER_NOT_FOUND, e);
+        } catch (InvalidDataAccessResourceUsageException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
 
     public User updateUser(User data, final Long id, BindingResult bindingResult) {
-        List<String> errors = errorService.collectErrorsBindings(bindingResult);
-        if (!errors.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_SERVER);
-        }
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_SERVER);
-        }
-        user.get().setMail(data.getMail());
-        user.get().setPassword(data.getPassword());
-        user.get().setName(data.getName());
-        user.get().setSurname(data.getSurname());
-        user.get().setPhone(data.getPhone());
         try {
+            List<String> errors = errorService.collectErrorsBindings(bindingResult);
+            if (!errors.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
+            }
+            Optional<User> user = userRepository.findById(id);
+            if (!user.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_USER_NOT_FOUND);
+            }
+            user.get().setMail(data.getMail());
+            user.get().setPassword(data.getPassword());
+            user.get().setName(data.getName());
+            user.get().setSurname(data.getSurname());
+            user.get().setPhone(data.getPhone());
             return userRepository.save(user.get());
-        } catch (Exception e) {
+        } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }

@@ -1,6 +1,5 @@
 package com.angema.hours.app.feature.record;
 
-import com.angema.hours.app.core.errors.ErrorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ public class RecordController {
 
     @Autowired
     private RecordService recordService;
-
-    @Autowired
-    private ErrorService errorService;
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -39,30 +35,20 @@ public class RecordController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     private Record save(@Valid @RequestBody Record data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        return recordService.saveRecord(data);
+        return recordService.saveRecord(data, bindingResult);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     private Record delete(@PathVariable("id") Long id) {
-        Record record = recordService.getIdRecord(id);
-        recordService.deleteRecord(record);
-        return record;
+        return recordService.deleteRecord(id);
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    private Record update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
-        Record record = recordService.getIdRecord(id);
-        record.setDate(data.getDate());
-        record.setHours(data.getHours());
-        record.setDescription(data.getDescription());
-        record.setUser(data.getUser());
-        record.setProject(data.getProject());
-        return recordService.saveRecord(record);
+    private Record update(@PathVariable("id") Long id, @Valid @RequestBody Record data, BindingResult bindingResult) {
+        return recordService.updateRecord(data, id, bindingResult);
     }
 }
