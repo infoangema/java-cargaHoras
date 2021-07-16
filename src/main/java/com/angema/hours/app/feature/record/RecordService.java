@@ -61,11 +61,11 @@ public class RecordService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
             }
             Optional<User> user = userRepository.findById(record.getUser().getId());
-            if (user.isEmpty()) {
+            if (!user.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_NOT_EXISTS_USER);
             }
             Optional<Project> project = projectRepository.findById(record.getProject().getId());
-            if (project.isEmpty()) {
+            if (!project.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_NOT_EXISTS_PROJECT);
             }
             record.setUser(user.get());
@@ -100,11 +100,11 @@ public class RecordService {
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND);
             }
             Optional<User> user = userRepository.findById(data.getUser().getId());
-            if (user.isEmpty()) {
+            if (!user.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_NOT_EXISTS_USER);
             }
             Optional<Project> project = projectRepository.findById(data.getProject().getId());
-            if (project.isEmpty()) {
+            if (!project.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_NOT_EXISTS_PROJECT);
             }
             record.get().setDate(data.getDate());
