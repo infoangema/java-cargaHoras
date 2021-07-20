@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -27,8 +28,7 @@ public class Project implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_NAME)
     private String name;
 
-    @Size(min = Constant.MIN_CHARACTER_DESCRIPTION, max = Constant.MAX_CHARACTER_DESCRIPTION, message = Messages.ERROR_DESCRIPTION)
-    @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
+    @NotNull(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
