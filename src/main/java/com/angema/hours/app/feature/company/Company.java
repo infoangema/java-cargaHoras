@@ -27,7 +27,6 @@ public class Company implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_NAME)
     private String name;
 
-    @NotNull(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
     @Size(min = Constant.MIN_CHARACTER_CUIT, max = Constant.MAX_CHARACTER_CUIT, message = Messages.ERROR_CUIT)

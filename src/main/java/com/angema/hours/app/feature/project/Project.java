@@ -28,7 +28,6 @@ public class Project implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_NAME)
     private String name;
 
-    @NotNull(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)

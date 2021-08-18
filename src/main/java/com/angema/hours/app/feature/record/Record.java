@@ -34,7 +34,6 @@ public class Record implements Serializable {
     @NotNull(message = Messages.ERROR_NULL_HOURS)
     private Integer hours;
 
-    @NotNull(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)

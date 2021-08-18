@@ -41,6 +41,5 @@ public class Contact implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
 
-    @NotNull(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 }
