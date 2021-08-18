@@ -31,4 +31,5 @@ public class Messages {
     public static final String ERROR_NULL_DIRECTION = "El campo direction no puede ser valor nulo.";
     public static final String ERROR_NULL_DATE = "El campo date no puede ser valor nulo.";
     public static final String ERROR_NULL_HOURS = "El campo hours no puede ser valor nulo.";
+    public static final String ERROR_NULL_COMPANY = "El campo company no puede ser valor nulo.";
 }
