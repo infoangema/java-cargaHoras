@@ -84,6 +84,7 @@ public class ContactService {
             contact.get().setMail(data.getMail());
             contact.get().setPhone(data.getPhone());
             contact.get().setDescription(data.getDescription());
+            contact.get().setViewed(data.isViewed());
             return contactRepository.save(contact.get());
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);

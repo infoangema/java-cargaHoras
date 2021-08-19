@@ -5,11 +5,12 @@ import com.angema.hours.app.core.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -42,4 +43,7 @@ public class Contact implements Serializable {
     private String phone;
 
     private String description;
+
+    @Value("false")
+    private boolean viewed;
 }
