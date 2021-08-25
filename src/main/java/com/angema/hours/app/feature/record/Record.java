@@ -43,6 +43,4 @@ public class Record implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_project")
     private Project project;
-
-    private boolean visible;
 }
