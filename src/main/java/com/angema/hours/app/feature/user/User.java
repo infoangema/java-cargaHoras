@@ -2,6 +2,7 @@ package com.angema.hours.app.feature.user;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
+import com.angema.hours.app.core.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,4 +44,8 @@ public class User implements Serializable {
     @Size(min = Constant.MIN_CHARACTER_PHONE, max = Constant.MAX_CHARACTER_PHONE, message = Messages.ERROR_PHONE)
     @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
+
+    private Roles rol;
+
+    private boolean status;
 }

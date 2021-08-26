@@ -2,6 +2,8 @@ package com.angema.hours.app.core;
 
 public class Messages {
 
+    public static final String ERROR_PASSWORD_INCORRECT = "La contraseña es incorrecta.";
+
     public static final String ERROR_USER_NOT_FOUND = "Usuario no encontrado.";
     public static final String ERROR_RECORD_NOT_FOUND = "Registro no encontrado.";
     public static final String ERROR_PROJECT_NOT_FOUND = "Proyecto no encontrado.";

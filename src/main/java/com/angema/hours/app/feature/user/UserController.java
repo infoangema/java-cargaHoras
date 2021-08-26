@@ -3,6 +3,7 @@ package com.angema.hours.app.feature.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,12 @@ public class UserController {
     @PostMapping()
     private User save(@Valid @RequestBody User data, BindingResult bindingResult) {
         return userService.saveUser(data, bindingResult);
+    }
+
+    @ResponseBody
+    @PostMapping("/login")
+    private ResponseEntity<User> login (@Valid @RequestBody UserLogin userData, BindingResult bindingResult) {
+        return userService.login(userData, bindingResult);
     }
 
     @ResponseBody
