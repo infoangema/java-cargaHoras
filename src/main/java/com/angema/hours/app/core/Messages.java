@@ -17,7 +17,6 @@ public class Messages {
     public static final String ERROR_NAME = "El campo name debe contener un minimo de " + Constant.MIN_CHARACTER_NAME + " y un maximo de " + Constant.MAX_CHARACTER_NAME + " caracteres.";
     public static final String ERROR_SURNAME = "El campo surname debe contener un minimo de " + Constant.MIN_CHARACTER_SURNAME + " y un maximo de " + Constant.MAX_CHARACTER_SURNAME + " caracteres.";
     public static final String ERROR_PHONE = "El campo phone debe contener un minimo de " + Constant.MIN_CHARACTER_PHONE + " y un maximo de " + Constant.MAX_CHARACTER_PHONE + " caracteres.";
-    public static final String ERROR_DESCRIPTION = "El campo description debe contener un minimo de " + Constant.MIN_CHARACTER_DESCRIPTION + " y un maximo de " + Constant.MAX_CHARACTER_DESCRIPTION + " caracteres.";
     public static final String ERROR_CUIT = "El campo cuit debe contener un minimo de " + Constant.MIN_CHARACTER_CUIT + " y un maximo de " + Constant.MAX_CHARACTER_CUIT + " caracteres.";
     public static final String ERROR_DIRECTION = "El campo direction debe contener un minimo de " + Constant.MIN_CHARACTER_DIRECTION + " y un maximo de " + Constant.MAX_CHARACTER_DIRECTION + " caracteres.";
     public static final String ERROR_HOURS = "El campo hours debe ser un valor entre " + Constant.MIN_VALUE_HOURS + " y " + Constant.MAX_VALUE_HOURS + ".";
@@ -32,4 +31,5 @@ public class Messages {
     public static final String ERROR_NULL_DIRECTION = "El campo direction no puede ser valor nulo.";
     public static final String ERROR_NULL_DATE = "El campo date no puede ser valor nulo.";
     public static final String ERROR_NULL_HOURS = "El campo hours no puede ser valor nulo.";
+    public static final String ERROR_NULL_COMPANY = "El campo company no puede ser valor nulo.";
 }
