@@ -56,7 +56,7 @@ public class UserService {
             if (!errors.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
             }
-            user.setRol(Roles.USER);
+            user.setRol(Roles.USER.toString());
             user.setStatus(true);
             return userRepository.save(user);
         } catch (InvalidDataAccessResourceUsageException e) {

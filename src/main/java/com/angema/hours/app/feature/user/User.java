@@ -45,7 +45,7 @@ public class User implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
 
-    private Roles rol;
+    private String rol;
 
     private boolean status;
 }
