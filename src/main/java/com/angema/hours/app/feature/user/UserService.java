@@ -1,6 +1,7 @@
 package com.angema.hours.app.feature.user;
 
 import com.angema.hours.app.core.Messages;
+import com.angema.hours.app.core.Roles;
 import com.angema.hours.app.core.errors.ErrorService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -55,7 +56,9 @@ public class UserService {
             if (!errors.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
             }
-                return userRepository.save(user);
+            user.setRol(Roles.USER);
+            user.setStatus(true);
+            return userRepository.save(user);
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
@@ -115,6 +118,11 @@ public class UserService {
                     .setIssuedAt(new Date(time))
                     .setExpiration(new Date(time + 900000))
                     .claim("mail", user.get().getMail())
+                    .claim("name", user.get().getName())
+                    .claim("surname", user.get().getSurname())
+                    .claim("phone", user.get().getPhone())
+                    .claim("rol", user.get().getRol())
+                    .claim("status", user.get().isStatus())
                     .compact();
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", jwt);
