@@ -125,7 +125,8 @@ public class UserService {
                     .claim("status", user.get().isStatus())
                     .compact();
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("Authorization", jwt);
+            responseHeaders.set("Access-Control-Expose-Headers", "authorization");
+            responseHeaders.set("Authorization", "Bearer " + jwt);
             return ResponseEntity.ok().headers(responseHeaders).body(user.get());
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
