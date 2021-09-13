@@ -1,4 +1,4 @@
-package com.angema.hours.app.feature.user;
+package com.angema.hours.app.feature.login;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +10,14 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/auth/login")
 public class UserLoginController {
 
     @Autowired
-    private UserService userService;
+    private UserLoginService userLoginService;
 
-    @ResponseBody
     @PostMapping()
-    private ResponseEntity<User> login (@Valid @RequestBody UserLogin userData, BindingResult bindingResult) {
-        return userService.login(userData, bindingResult);
+    private ResponseEntity<ResponseLogin> login (@Valid @RequestBody UserLogin userData, BindingResult bindingResult) {
+        return userLoginService.login(userData, bindingResult);
     }
 }

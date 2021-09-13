@@ -1,4 +1,4 @@
-package com.angema.hours.app.feature.user;
+package com.angema.hours.app.feature.login;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
