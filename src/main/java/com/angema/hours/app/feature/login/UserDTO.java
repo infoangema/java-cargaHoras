@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +17,5 @@ public class UserDTO implements Serializable {
     private String name;
     private String surname;
     private String phone;
-    private List<String> rol;
+    private String rol;
 }

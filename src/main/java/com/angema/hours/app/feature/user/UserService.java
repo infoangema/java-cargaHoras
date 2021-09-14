@@ -49,9 +49,7 @@ public class UserService {
             if (!errors.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
             }
-            List<String> rol = new ArrayList<>();
-            rol.add(Roles.USER.toString());
-            user.setRol(rol);
+            user.setRol(Roles.USER.toString());
             user.setStatus(true);
             return userRepository.save(user);
         } catch (InvalidDataAccessResourceUsageException e) {
