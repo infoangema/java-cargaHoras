@@ -32,6 +32,13 @@ public class RecordController {
     }
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/filter")
+    private List<Record> getFilter(@RequestParam (required = false) String date, @RequestParam (required = false) Long operator, @RequestParam (required = false) Long project) {
+        return recordService.getListFilter(date, operator, project);
+    }
+
+    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     private Record save(@Valid @RequestBody Record data, BindingResult bindingResult) {

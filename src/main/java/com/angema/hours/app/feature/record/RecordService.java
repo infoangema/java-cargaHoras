@@ -117,4 +117,11 @@ public class RecordService {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
+
+    public List<Record> getListFilter (String date, Long idUser, Long idProject) {
+        if (date == "") {
+            date = null;
+        }
+        return recordRepository.findByListUser(date, idUser, idProject);
+    }
 }
