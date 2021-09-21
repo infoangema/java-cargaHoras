@@ -25,6 +25,7 @@ public class Record implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Max(value = Constant.MAX_CHARACTER_DATE, message = Messages.ERROR_DATE)
     @NotNull(message = Messages.ERROR_NULL_DATE)
     private String date;
 
