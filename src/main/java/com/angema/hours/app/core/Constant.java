@@ -22,4 +22,5 @@ public class Constant {
     public static final int MAX_CHARACTER_DIRECTION = 50;
     public static final int MAX_VALUE_HOURS = 24;
     public static final int MAX_CHARACTER_DATE = 10;
+    public static final int MAX_CHARACTER_DESCRIPTION = 250;
 }

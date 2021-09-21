@@ -25,7 +25,7 @@ public class Record implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Max(value = Constant.MAX_CHARACTER_DATE, message = Messages.ERROR_DATE)
+    @Size(max = Constant.MAX_CHARACTER_DATE, message = Messages.ERROR_DATE)
     @NotNull(message = Messages.ERROR_NULL_DATE)
     private String date;
 
@@ -34,6 +34,7 @@ public class Record implements Serializable {
     @NotNull(message = Messages.ERROR_NULL_HOURS)
     private Integer hours;
 
+    @Size(max = Constant.MAX_CHARACTER_DESCRIPTION, message = Messages.ERROR_DESCRIPTION)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)

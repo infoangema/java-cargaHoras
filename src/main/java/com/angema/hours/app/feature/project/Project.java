@@ -28,6 +28,7 @@ public class Project implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_NAME)
     private String name;
 
+    @Size(max = Constant.MAX_CHARACTER_DESCRIPTION, message = Messages.ERROR_DESCRIPTION)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -6,6 +6,7 @@ import com.angema.hours.app.core.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -51,5 +52,6 @@ public class User implements Serializable {
 
     private String rol;
 
+    @Value("true")
     private boolean status;
 }
