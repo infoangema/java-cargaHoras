@@ -25,9 +25,9 @@ public class Record implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = Constant.MAX_CHARACTER_DATE, message = Messages.ERROR_DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @NotNull(message = Messages.ERROR_NULL_DATE)
-    private String date;
+    private LocalDate date;
 
     @Min(value = Constant.MIN_VALUE_HOURS, message = Messages.ERROR_HOURS)
     @Max(value = Constant.MAX_VALUE_HOURS, message = Messages.ERROR_HOURS)

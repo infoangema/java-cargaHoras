@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -118,10 +120,18 @@ public class RecordService {
         }
     }
 
-    public List<Record> getListFilter (String date, Long idUser, Long idProject) {
-        if (date == "") {
-            date = null;
+    public List<Record> getListFilter (final LocalDate datefrom, final LocalDate dateto, Long idUser, Long idProject) {
+        List<Record> listFilter = recordRepository.findByListUser(idUser, idProject);
+        if (datefrom != null && listFilter.size() != 0) {
+            if (dateto != null) {
+                return listFilter.stream().filter(x -> (x.getDate().compareTo(datefrom) >= 0 && (x.getDate().compareTo(dateto) <= 0)) ).collect(Collectors.toList());
+            } else {
+                return listFilter.stream().filter(x -> (x.getDate().compareTo(datefrom) == 0) ).collect(Collectors.toList());
+            }
         }
-        return recordRepository.findByListUser(date, idUser, idProject);
+        if (datefrom == null && dateto != null && listFilter.size() != 0) {
+            return listFilter.stream().filter(x -> (x.getDate().compareTo(dateto) == 0) ).collect(Collectors.toList());
+        }
+        return listFilter;
     }
 }

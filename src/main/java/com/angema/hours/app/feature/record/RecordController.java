@@ -2,11 +2,13 @@ package com.angema.hours.app.feature.record;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -34,8 +36,11 @@ public class RecordController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/filter")
-    private List<Record> getFilter(@RequestParam (required = false) String date, @RequestParam (required = false) Long operator, @RequestParam (required = false) Long project) {
-        return recordService.getListFilter(date, operator, project);
+    private List<Record> getFilter(@RequestParam (required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate datefrom,
+                                   @RequestParam (required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate dateto,
+                                   @RequestParam (required = false) Long operator,
+                                   @RequestParam (required = false) Long project) {
+        return recordService.getListFilter(datefrom, dateto, operator, project);
     }
 
     @ResponseBody

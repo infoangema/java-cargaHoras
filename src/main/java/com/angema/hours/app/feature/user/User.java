@@ -52,6 +52,5 @@ public class User implements Serializable {
 
     private String rol;
 
-    @Value("true")
     private boolean status;
 }

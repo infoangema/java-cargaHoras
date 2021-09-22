@@ -50,6 +50,7 @@ public class UserService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Arrays.deepToString(errors.toArray()));
             }
             user.setRol(Roles.USER.toString());
+            user.setStatus(true);
             return userRepository.save(user);
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);

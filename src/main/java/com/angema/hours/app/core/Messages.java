@@ -22,7 +22,6 @@ public class Messages {
     public static final String ERROR_CUIT = "El campo cuit debe contener un minimo de " + Constant.MIN_CHARACTER_CUIT + " y un maximo de " + Constant.MAX_CHARACTER_CUIT + " caracteres.";
     public static final String ERROR_DIRECTION = "El campo direction debe contener un minimo de " + Constant.MIN_CHARACTER_DIRECTION + " y un maximo de " + Constant.MAX_CHARACTER_DIRECTION + " caracteres.";
     public static final String ERROR_HOURS = "El campo hours debe ser un valor entre " + Constant.MIN_VALUE_HOURS + " y " + Constant.MAX_VALUE_HOURS + ".";
-    public static final String ERROR_DATE = "El campo date debe contener un maximo de " + Constant.MAX_CHARACTER_DATE + " caracteres.";
     public static final String ERROR_DESCRIPTION = "El campo descripcion debe contener un maximo de " + Constant.MAX_CHARACTER_DESCRIPTION + " caracteres.";
 
     public static final String ERROR_NULL_MAIL = "El campo mail no puede ser valor nulo.";
