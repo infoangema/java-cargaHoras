@@ -43,13 +43,6 @@ public class RecordController {
         return recordService.getListFilter(datefrom, dateto, operator, project);
     }
 
-    //@ResponseBody
-    //@ResponseStatus(HttpStatus.OK)
-    //@GetMapping("/statistics")
-    //private List<RecordStatistics> getStatistics () {
-    //    return recordService.getStatistics();
-    //}
-
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()

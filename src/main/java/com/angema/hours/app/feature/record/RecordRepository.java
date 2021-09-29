@@ -14,5 +14,5 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     List<Record> findByListUser (@Param("idUser") Long idUser, @Param("idProject") Long idProject);
 
     @Query(value = "SELECT date, SUM(hours), id_project, id_user FROM records GROUP BY date, id_project, id_user", nativeQuery = true)
-    List<RecordStatistics> findByRecordStatistics ();
+    List<Object> findByRecordStatistics ();
 }

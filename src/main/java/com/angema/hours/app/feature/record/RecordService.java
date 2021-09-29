@@ -137,8 +137,4 @@ public class RecordService {
         }
         return listFilter;
     }
-
-    public List<RecordStatistics> getStatistics () {
-        return recordRepository.findByRecordStatistics();
-    }
 }
