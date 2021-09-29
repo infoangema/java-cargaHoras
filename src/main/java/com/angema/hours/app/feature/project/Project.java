@@ -6,6 +6,7 @@ import com.angema.hours.app.feature.company.Company;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,4 +35,6 @@ public class Project implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_company")
     private Company company;
+
+    private boolean status;
 }

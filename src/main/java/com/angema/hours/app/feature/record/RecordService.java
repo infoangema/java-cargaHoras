@@ -124,6 +124,9 @@ public class RecordService {
         List<Record> listFilter = recordRepository.findByListUser(idUser, idProject);
         if (datefrom != null && listFilter.size() != 0) {
             if (dateto != null) {
+                if (datefrom.compareTo(dateto) < 0) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_VALIDATION_DATE);
+                }
                 return listFilter.stream().filter(x -> (x.getDate().compareTo(datefrom) >= 0 && (x.getDate().compareTo(dateto) <= 0)) ).collect(Collectors.toList());
             } else {
                 return listFilter.stream().filter(x -> (x.getDate().compareTo(datefrom) == 0) ).collect(Collectors.toList());
@@ -133,5 +136,9 @@ public class RecordService {
             return listFilter.stream().filter(x -> (x.getDate().compareTo(dateto) == 0) ).collect(Collectors.toList());
         }
         return listFilter;
+    }
+
+    public List<RecordStatistics> getStatistics () {
+        return recordRepository.findByRecordStatistics();
     }
 }

@@ -3,6 +3,7 @@ package com.angema.hours.app.core;
 public class Messages {
 
     public static final String ERROR_PASSWORD_INCORRECT = "La contraseña es incorrecta.";
+    public static final String ERROR_VALIDATION_DATE = "La fecha Hasta (fin) no puede ser menor a la fecha Desde (inicio).";
 
     public static final String ERROR_USER_NOT_FOUND = "Usuario no encontrado.";
     public static final String ERROR_RECORD_NOT_FOUND = "Registro no encontrado.";
@@ -21,7 +22,7 @@ public class Messages {
     public static final String ERROR_PHONE = "El campo phone debe contener un minimo de " + Constant.MIN_CHARACTER_PHONE + " y un maximo de " + Constant.MAX_CHARACTER_PHONE + " caracteres.";
     public static final String ERROR_CUIT = "El campo cuit debe contener un minimo de " + Constant.MIN_CHARACTER_CUIT + " y un maximo de " + Constant.MAX_CHARACTER_CUIT + " caracteres.";
     public static final String ERROR_DIRECTION = "El campo direction debe contener un minimo de " + Constant.MIN_CHARACTER_DIRECTION + " y un maximo de " + Constant.MAX_CHARACTER_DIRECTION + " caracteres.";
-    public static final String ERROR_HOURS = "El campo hours debe ser un valor entre " + Constant.MIN_VALUE_HOURS + " y " + Constant.MAX_VALUE_HOURS + ".";
+    public static final String ERROR_HOURS = "El campo hours contener un minimo de " + Constant.MIN_VALUE_HOURS + " caracter.";
     public static final String ERROR_DESCRIPTION = "El campo descripcion debe contener un maximo de " + Constant.MAX_CHARACTER_DESCRIPTION + " caracteres.";
 
     public static final String ERROR_NULL_MAIL = "El campo mail no puede ser valor nulo.";

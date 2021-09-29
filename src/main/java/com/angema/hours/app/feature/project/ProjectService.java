@@ -60,6 +60,7 @@ public class ProjectService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Messages.ERROR_NOT_EXISTS_COMPANY);
             }
             project.setCompany(company.get());
+            project.setStatus(true);
             return projectRepository.save(project);
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
@@ -96,6 +97,7 @@ public class ProjectService {
             project.get().setName(data.getName());
             project.get().setDescription(data.getDescription());
             project.get().setCompany(company.get());
+            project.get().setStatus(data.isStatus());
             return projectRepository.save(project.get());
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);

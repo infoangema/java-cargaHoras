@@ -85,6 +85,8 @@ public class UserService {
             user.get().setName(data.getName());
             user.get().setSurname(data.getSurname());
             user.get().setPhone(data.getPhone());
+            user.get().setRol(data.getRol());
+            user.get().setStatus(data.isStatus());
             return userRepository.save(user.get());
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);

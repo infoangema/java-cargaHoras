@@ -45,6 +45,5 @@ public class Contact implements Serializable {
     @Size(max = Constant.MAX_CHARACTER_DESCRIPTION, message = Messages.ERROR_DESCRIPTION)
     private String description;
 
-    @Value("false")
     private boolean viewed;
 }
