@@ -13,6 +13,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(value = "select c from Record c where (:idUser is null or c.user.id = :idUser) and (:idProject is null or c.project.id = :idProject)")
     List<Record> findByListUser (@Param("idUser") Long idUser, @Param("idProject") Long idProject);
 
-    @Query(value = "SELECT date, SUM(hours), id_project, id_user FROM records GROUP BY date, id_project, id_user", nativeQuery = true)
-    List<Object> findByRecordStatistics ();
+    @Query(value = "SELECT date, SUM(hours) as hourx, projects.name as nameproject, users.name as nameuser, users.surname as surnameuser " +
+            "FROM records join users on records.id_user = users.id join projects on records.id_project = projects.id " +
+            "GROUP BY date, nameproject, nameuser, surnameuser", nativeQuery = true)
+    List<RecordStatistics> findByRecordStatistics ();
 }

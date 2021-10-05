@@ -44,6 +44,13 @@ public class RecordController {
     }
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/statistics")
+    private List<RecordStatistics> getStatistics () {
+        return recordService.getStatisticsRecord();
+    }
+
+    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     private Record save(@Valid @RequestBody Record data, BindingResult bindingResult) {

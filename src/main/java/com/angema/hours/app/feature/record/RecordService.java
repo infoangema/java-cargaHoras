@@ -15,9 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -136,5 +134,11 @@ public class RecordService {
             return listFilter.stream().filter(x -> (x.getDate().compareTo(dateto) == 0) ).collect(Collectors.toList());
         }
         return listFilter;
+    }
+
+    public List<RecordStatistics> getStatisticsRecord () {
+        List<RecordStatistics> objs = recordRepository.findByRecordStatistics();
+        Collections.sort(objs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        return objs;
     }
 }
