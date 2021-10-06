@@ -16,5 +16,5 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(value = "SELECT date, SUM(hours) as hourx, projects.name as nameproject, users.name as nameuser, users.surname as surnameuser " +
             "FROM records join users on records.id_user = users.id join projects on records.id_project = projects.id " +
             "GROUP BY date, nameproject, nameuser, surnameuser", nativeQuery = true)
-    List<RecordStatistics> findByRecordStatistics ();
+    List<RecordStatisticsDTO> findByRecordStatistics ();
 }

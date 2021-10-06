@@ -46,7 +46,7 @@ public class RecordController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/statistics")
-    private List<RecordStatistics> getStatistics () {
+    private List<RecordStatisticsReturn> getStatistics () {
         return recordService.getStatisticsRecord();
     }
 

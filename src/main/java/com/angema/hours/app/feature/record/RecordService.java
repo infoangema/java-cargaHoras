@@ -136,9 +136,35 @@ public class RecordService {
         return listFilter;
     }
 
-    public List<RecordStatistics> getStatisticsRecord () {
-        List<RecordStatistics> objs = recordRepository.findByRecordStatistics();
-        Collections.sort(objs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
-        return objs;
+    public List<RecordStatisticsReturn> getStatisticsRecord () {
+        try {
+            List<RecordStatisticsDTO> objs = recordRepository.findByRecordStatistics();
+            if (objs.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_STATISTICS);
+            }
+            Collections.sort(objs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+            List<RecordStatisticsReturn> rse = new ArrayList<>();
+            int i = 0;
+            while(i < objs.size()) {
+                RecordStatisticsReturn objExternal = new RecordStatisticsReturn();
+                LocalDate aux = objs.get(i).getDate();
+                objExternal.setDate(objs.get(i).getDate());
+                List<RecordStatisticsInternal> rsi = new ArrayList<>();
+                while(i < objs.size() && aux.compareTo(objs.get(i).getDate()) == 0) {
+                    RecordStatisticsInternal objInternal = new RecordStatisticsInternal();
+                    objInternal.setNameProject(objs.get(i).getNameproject());
+                    objInternal.setNameUser(objs.get(i).getNameuser());
+                    objInternal.setSurnameUser(objs.get(i).getSurnameuser());
+                    objInternal.setHours(objs.get(i).getHourx());
+                    rsi.add(objInternal);
+                    i++;
+                }
+                objExternal.setRecords(rsi);
+                rse.add(objExternal);
+            }
+            return rse;
+        } catch (InvalidDataAccessResourceUsageException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
     }
 }

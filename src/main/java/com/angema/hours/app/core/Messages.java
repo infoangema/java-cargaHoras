@@ -4,6 +4,7 @@ public class Messages {
 
     public static final String ERROR_PASSWORD_INCORRECT = "La contraseña es incorrecta.";
     public static final String ERROR_VALIDATION_DATE = "La fecha Hasta (fin) no puede ser menor a la fecha Desde (inicio).";
+    public static final String ERROR_STATISTICS = "No hay registros para realizar estadisticas.";
 
     public static final String ERROR_USER_NOT_FOUND = "Usuario no encontrado.";
     public static final String ERROR_RECORD_NOT_FOUND = "Registro no encontrado.";

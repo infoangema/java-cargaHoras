@@ -2,7 +2,7 @@ package com.angema.hours.app.feature.record;
 
 import java.time.LocalDate;
 
-public interface RecordStatistics {
+public interface RecordStatisticsDTO {
 
     LocalDate getDate();
     Integer getHourx();
