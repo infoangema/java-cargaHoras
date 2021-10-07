@@ -147,10 +147,12 @@ public class RecordService {
             int i = 0;
             while(i < objs.size()) {
                 RecordStatisticsReturn objExternal = new RecordStatisticsReturn();
-                LocalDate aux = objs.get(i).getDate();
-                objExternal.setDate(objs.get(i).getDate());
+                int month = objs.get(i).getDate().getMonthValue();
+                int year = objs.get(i).getDate().getYear();
+                LocalDate data = LocalDate.of(year, month, 1);
+                objExternal.setDate(data);
                 List<RecordStatisticsInternal> rsi = new ArrayList<>();
-                while(i < objs.size() && aux.compareTo(objs.get(i).getDate()) == 0) {
+                while(i < objs.size() && (objs.get(i).getDate().getMonthValue() == month && objs.get(i).getDate().getYear() == year)) {
                     RecordStatisticsInternal objInternal = new RecordStatisticsInternal();
                     objInternal.setNameProject(objs.get(i).getNameproject());
                     objInternal.setNameUser(objs.get(i).getNameuser());
