@@ -2,6 +2,9 @@ package com.angema.hours.app.feature.login;
 
 import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.core.errors.ErrorService;
+import com.angema.hours.app.feature.message.Message;
+import com.angema.hours.app.feature.message.MessageResponse;
+import com.angema.hours.app.feature.message.MessageService;
 import com.angema.hours.app.feature.user.User;
 import com.angema.hours.app.feature.user.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -31,6 +34,9 @@ public class UserLoginService {
     @Autowired
     private ErrorService errorService;
 
+    @Autowired
+    private MessageService messageService;
+
     public ResponseEntity<ResponseLogin> login (UserLogin userData, BindingResult bindingResult) {
         try {
             List<String> errors = errorService.collectErrorsBindings(bindingResult);
@@ -58,7 +64,18 @@ public class UserLoginService {
                     .compact();
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", "Bearer " + jwt);
-            UserDTO userDTO = new UserDTO(user.get().getMail(), user.get().getName(), user.get().getSurname(), user.get().getPhone(), user.get().getRol());
+
+            Optional<Message> message = messageService.getIdMessage(user.get().getId());
+            MessageResponse messageResponse = new MessageResponse();
+            if(message.isPresent()) {
+                messageResponse.setUrl(message.get().getUrl());
+                messageResponse.setStatus(message.get().isStatus());
+                messageResponse.setMessage(message.get().getMessage());
+                messageResponse.setDateTo(message.get().getDateTo());
+                messageResponse.setDateFrom(message.get().getDateFrom());
+            }
+
+            UserDTO userDTO = new UserDTO(user.get().getMail(), user.get().getName(), user.get().getSurname(), user.get().getPhone(), user.get().getRol(), messageResponse);
             UserLoginBody userLoginBody = new UserLoginBody(userDTO, jwt);
             return new ResponseEntity(new ResponseLogin(false, null, userLoginBody), responseHeaders, HttpStatus.OK);
         } catch (InvalidDataAccessResourceUsageException e) {

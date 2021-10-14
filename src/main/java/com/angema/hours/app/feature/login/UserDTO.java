@@ -1,12 +1,11 @@
 package com.angema.hours.app.feature.login;
 
+import com.angema.hours.app.feature.message.MessageResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +17,5 @@ public class UserDTO implements Serializable {
     private String surname;
     private String phone;
     private String rol;
+    private MessageResponse message;
 }
