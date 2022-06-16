@@ -1,4 +1,4 @@
-package com.angema.hours.app.core.errors;
+package com.angema.hours.app.core.exceptions;
 
 import com.angema.hours.app.core.Messages;
 import org.springframework.http.HttpStatus;
@@ -9,13 +9,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class ErrorService {
+public class ExceptionService {
 
     public void collectErrorsBindings(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             for (Object object : bindingResult.getAllErrors()) {
                 if(object instanceof FieldError) {
-                    FieldError fieldError = (FieldError) object;
+                   FieldError fieldError = (FieldError) object;
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, fieldError.getDefaultMessage());
                 }
                 if(object instanceof ObjectError) {

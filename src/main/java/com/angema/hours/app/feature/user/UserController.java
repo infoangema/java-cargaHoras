@@ -1,9 +1,8 @@
 package com.angema.hours.app.feature.user;
 
-import com.angema.hours.app.core.errors.ErrorService;
+import com.angema.hours.app.core.exceptions.ExceptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private ErrorService errorService;
+    private ExceptionService exceptionService;
 
     @GetMapping()
     private ResponseEntity<List<User>> getAll() {
@@ -32,6 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
+
     private User getId(@PathVariable("id") Long id) {
         return userService.getIdUser(id);
     }
@@ -40,7 +40,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     private User save(@Valid @RequestBody User data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         return userService.saveUser(data);
     }
 
@@ -57,7 +57,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     private User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         User user = userService.getIdUser(id);
         user.setMail(data.getMail());
         user.setPassword(data.getPassword());

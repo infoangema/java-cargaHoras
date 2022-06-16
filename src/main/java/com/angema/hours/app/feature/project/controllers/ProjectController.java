@@ -1,6 +1,6 @@
 package com.angema.hours.app.feature.project.controllers;
 
-import com.angema.hours.app.core.errors.ErrorService;
+import com.angema.hours.app.core.exceptions.ExceptionService;
 import com.angema.hours.app.feature.project.models.Project;
 import com.angema.hours.app.feature.project.services.ProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @Autowired
-    private ErrorService errorService;
+    private ExceptionService exceptionService;
 
     @GetMapping()
     private ResponseEntity<List<Project>> getAll() {
@@ -37,7 +37,7 @@ public class ProjectController {
 
     @PostMapping()
     private ResponseEntity<Project> save(@Valid @RequestBody Project data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.saveProject(data);
         return ResponseEntity.ok().body(project);
     }
@@ -51,7 +51,7 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     private ResponseEntity<Project> update(@Valid @RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.getIdProject(id);
         project.setName(data.getName());
         project.setDescription(data.getDescription());

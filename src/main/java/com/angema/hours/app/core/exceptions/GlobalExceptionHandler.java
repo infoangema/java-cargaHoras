@@ -2,6 +2,9 @@ package com.angema.hours.app.core.exceptions;
 
 import com.angema.hours.app.core.auth.AuthException;
 import com.angema.hours.app.core.globalResponse.GlobalResponse;
+import com.angema.hours.app.core.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,17 +14,20 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Date;
 
 @ControllerAdvice
+@Order(-2)
 public class GlobalExceptionHandler {
+
+    @Autowired
+    private DateUtil dateUtil;
 
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<?> authException(AuthException ex, WebRequest request) {
         GlobalResponse response = new GlobalResponse();
         response.status = HttpStatus.UNAUTHORIZED;
         response.path = request.getDescription(false);
-        response.timestamp = new Date();
+        response.timestamp = dateUtil.getDateString();
         response.body = null;
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
-        response.error = errorDetails;
+        response.error = ex.getMessage();
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
@@ -30,11 +36,10 @@ public class GlobalExceptionHandler {
         GlobalResponse response = new GlobalResponse();
         response.status = HttpStatus.NOT_FOUND;
         response.path = request.getDescription(false);
-        response.timestamp = new Date();
+        response.timestamp = dateUtil.getDateString();
         response.body = null;
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
-        response.error = errorDetails;
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        response.error = ex.getMessage();
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
@@ -42,10 +47,9 @@ public class GlobalExceptionHandler {
         GlobalResponse response = new GlobalResponse();
         response.status = HttpStatus.INTERNAL_SERVER_ERROR;
         response.path = request.getDescription(false);
-        response.timestamp = new Date();
+        response.timestamp = dateUtil.getDateString();
         response.body = null;
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
-        response.error = errorDetails;
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+        response.error = ex.getMessage();
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

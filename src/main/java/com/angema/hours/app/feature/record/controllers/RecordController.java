@@ -1,6 +1,6 @@
 package com.angema.hours.app.feature.record.controllers;
 
-import com.angema.hours.app.core.errors.ErrorService;
+import com.angema.hours.app.core.exceptions.ExceptionService;
 import com.angema.hours.app.feature.record.models.Record;
 import com.angema.hours.app.feature.record.services.RecordService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class RecordController {
     private RecordService recordService;
 
     @Autowired
-    private ErrorService errorService;
+    private ExceptionService exceptionService;
 
     @GetMapping()
     private ResponseEntity<List<Record>> getAll() {
@@ -37,7 +37,7 @@ public class RecordController {
 
     @PostMapping()
     private ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.saveRecord(data);
         return ResponseEntity.ok().body(record);
     }
@@ -51,7 +51,7 @@ public class RecordController {
 
     @PutMapping("/{id}")
     private ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        errorService.collectErrorsBindings(bindingResult);
+        exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.getIdRecord(id);
         record.setDate(data.getDate());
         record.setHours(data.getHours());
