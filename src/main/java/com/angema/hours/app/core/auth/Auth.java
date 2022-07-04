@@ -1,5 +1,7 @@
 package com.angema.hours.app.core.auth;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,8 @@ public class Auth {
     public String email;
     public String password;
 
-    @OneToMany(mappedBy = "auth", orphanRemoval = true)
+    @OneToMany(mappedBy = "auth", orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("name ASC")
+    @JsonManagedReference
     public List<AuthRoles> roles = new ArrayList<>();
 }

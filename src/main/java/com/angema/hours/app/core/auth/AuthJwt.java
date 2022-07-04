@@ -42,7 +42,10 @@ public class AuthJwt {
 
     public boolean validateToken(String token) {
         JWT jwt = jwt(token);
-        return jwt.isExpired();
+        if(jwt == null ) {
+            return false;
+        }
+        return !jwt.isExpired();
     }
 
     public String getPayLoad(String token) {
@@ -57,7 +60,11 @@ public class AuthJwt {
     }
 
     private JWT jwt(String token) {
-        Verifier verifier = HMACVerifier.newVerifier(SECRET);
-        return JWT.getDecoder().decode(token, verifier);
+        try {
+            Verifier verifier = HMACVerifier.newVerifier(SECRET);
+            return JWT.getDecoder().decode(token, verifier);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

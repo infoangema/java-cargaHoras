@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthService {
 
@@ -17,6 +19,9 @@ public class AuthService {
     @Value("${configs.auth.token.expiration:3600}")
     private int EXPIRATION_TIME;
 
+    @Autowired
+    private AuthRepository authRepository;
+
     public AuthResponse login(AuthUserLoggedIn user) {
 
         AuthResponse response = AuthResponse.builder()
@@ -26,11 +31,16 @@ public class AuthService {
                 .issuedAt(dateUtil.getDateMillis() + "")
                 .clientId(user.userName)
                 .expiresIn(EXPIRATION_TIME)
+                .clientData(user)
                 .build();
         return response;
     }
 
     public AuthUserLoggedIn getPayloadObject(String token) {
         return authJwt.getPayLoadObject(token);
+    }
+
+    public List<Auth> getUsers() {
+        return authRepository.findAll();
     }
 }

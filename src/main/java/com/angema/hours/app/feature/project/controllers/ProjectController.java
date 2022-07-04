@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/proyectos")
 public class ProjectController {
 
     @Autowired

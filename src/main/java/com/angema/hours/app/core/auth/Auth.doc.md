@@ -11,6 +11,29 @@
 </dependency>
 ```
 
+## Configuraciones necesarias: application.properties
+```
+## habilita el uso del login auth.
+configs.auth.security.enabled=true
+## timezone
+configs.auth.timezone=America/Argentina/Buenos_Aires
+## registra dato dentro del token. Deberia ir nombre de la empresa.
+configs.auth.issuer=angema
+## path que sera excluido en las configuraciones de seguridad.
+configs.auth.token.auth.path=/auth/login
+## clave secreta para token.
+configs.auth.token.secret=secret
+## tiempo de expiracion del token.
+configs.auth.token.expiration.seconds=3600
+## lista de path excluidos en las configuraciones de seguridad.
+configs.auth.exclude.paths=/auth/login,/health,/info,/error
+```
+
+## Modulos necesarios
+* **core/exceptions**
+* **core/globalResponse**
+* **core/utils**
+
 ## Modo de uso
 
 #### El modulo funciona con dos endpoints:
@@ -40,21 +63,5 @@
 }
 ```
 
-* application.properties
-```
-## habilita el uso del login auth.
-configs.auth.security.enabled=true
-## timezone
-configs.auth.timezone=America/Argentina/Buenos_Aires
-## registra dato dentro del token. Deberia ir nombre de la empresa.
-configs.auth.issuer=angema
-## path que sera excluido en las configuraciones de seguridad.
-configs.auth.token.auth.path=/auth/login
-## clave secreta para token.
-configs.auth.token.secret=secret
-## tiempo de expiracion del token.
-configs.auth.token.expiration.seconds=3600
-## lista de path excluidos en las configuraciones de seguridad.
-configs.auth.exclude.paths=/auth/login,/health,/info,/error
-```
+
 

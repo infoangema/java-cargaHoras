@@ -40,7 +40,6 @@ public class AuthValidator {
                 .name("Gerard")
                 .lastName("Palet")
                 .email("paletgerardo@gmail.com")
-                .phone("11-3643-3247")
                 .build();
     }
 
@@ -50,11 +49,11 @@ public class AuthValidator {
             message("Invalid grant_type");
         }
 
-        if (Objects.isNull(authRequest) || authRequest.user.equals("") || authRequest.password.equals("")) {
+        if (isNull(authRequest)) {
             message("Invalid user or password");
         }
 
-        Optional<Auth> userOpt = authRepository.findByUserNameAndPassword(authRequest.user, authRequest.password);
+        Optional<Auth> userOpt = authRepository.findByEmailAndPassword(authRequest.email, authRequest.password);
         if (!userOpt.isPresent()) {
             message("Invalid user or password");
         }
@@ -76,6 +75,9 @@ public class AuthValidator {
 //        }
         List<String> roles = new ArrayList<>();
         user.roles.forEach(role -> roles.add(role.name));
+        user.roles.forEach( r -> {
+            roles.add(r.name);
+        });
         return AuthUserLoggedIn.builder()
                 .userName(user.userName)
                 .name(user.name)
@@ -83,6 +85,14 @@ public class AuthValidator {
                 .email(user.email)
                 .roles(roles)
                 .build();
+    }
+
+    private boolean isNull(AuthRequest authRequest) {
+        return Objects.isNull(authRequest)
+                || authRequest.email == null
+                || authRequest.email.equals("")
+                || authRequest.password == null
+                || authRequest.password.equals("");
     }
 
     public void message(String message) throws AuthException {

@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -34,7 +36,15 @@ public class AuthController {
     @ResponseBody
     public GlobalResponse login(@RequestBody AuthRequest authRequest, @RequestParam("grant_type") String grantType) throws AuthException {
         AuthUserLoggedIn user = authValidator.validate(authRequest, grantType);
-        AuthResponse token = authService.login(user);
-        return globalResponseService.response(token, "/auth/login");
+        AuthResponse authResponse = authService.login(user);
+        return globalResponseService.response(authResponse, "/auth/login");
+    }
+
+    @GetMapping(path = "/users")
+    @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
+    @ResponseBody
+    public GlobalResponse getUserRoles() {
+        List<Auth> users = authService.getUsers();
+        return globalResponseService.response(users, "/user/users");
     }
 }

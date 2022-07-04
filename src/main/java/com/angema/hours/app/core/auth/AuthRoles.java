@@ -1,6 +1,7 @@
 package com.angema.hours.app.core.auth;
 
 import com.angema.hours.app.core.auth.Auth;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ public class AuthRoles {
 
     @ManyToOne
     @JoinColumn(name = "auth_id")
+    @JsonBackReference
     public Auth auth;
 
 }

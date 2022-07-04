@@ -40,7 +40,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String token = authToken.replace("Bearer ", "");
         validate = authJwt.validateToken(token);
-
+        if (!validate) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
         return validate;
 
 
