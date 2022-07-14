@@ -10,12 +10,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Record {
+@Table(name = "records")
+public class Record implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

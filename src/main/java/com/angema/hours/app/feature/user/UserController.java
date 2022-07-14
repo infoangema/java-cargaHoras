@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,8 @@ public class UserController {
     private ExceptionService exceptionService;
 
     @GetMapping()
-    private ResponseEntity<List<User>> getAll() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getAll() {
         List<User> user = userService.getAllUser();
         return ResponseEntity.ok().body(user);
     }
@@ -31,15 +33,16 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-
-    private User getId(@PathVariable("id") Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getId(@PathVariable("id") Long id) {
         return userService.getIdUser(id);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    private User save(@Valid @RequestBody User data, BindingResult bindingResult) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public User save(@Valid @RequestBody User data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         return userService.saveUser(data);
     }
@@ -47,7 +50,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @ResponseBody
-    private String delete(@PathVariable("id") Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String delete(@PathVariable("id") Long id) {
         User user = userService.getIdUser(id);
         userService.deleteUser(user);
         return "DELETE";
@@ -56,7 +60,8 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    private User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         User user = userService.getIdUser(id);
         user.setMail(data.getMail());

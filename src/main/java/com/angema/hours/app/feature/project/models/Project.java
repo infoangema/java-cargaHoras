@@ -32,6 +32,8 @@ public class Project implements Serializable {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "id_company")
     private Company company;
+
+    private boolean status;
 }

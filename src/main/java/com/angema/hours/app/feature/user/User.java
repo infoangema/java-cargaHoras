@@ -43,4 +43,8 @@ public class User implements Serializable {
     @Size(min = Constant.MIN_CHARACTER_PHONE, max = Constant.MAX_CHARACTER_PHONE, message = Messages.ERROR_PHONE)
     @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
+
+    private String rol;
+
+    private boolean status;
 }

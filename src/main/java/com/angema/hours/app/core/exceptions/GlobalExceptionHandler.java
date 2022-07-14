@@ -50,6 +50,10 @@ public class GlobalExceptionHandler {
         response.timestamp = dateUtil.getDateString();
         response.body = null;
         response.error = ex.getMessage();
+        if(ex.getMessage().contains("Access is denied")){
+            response.status = HttpStatus.FORBIDDEN;;
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

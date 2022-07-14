@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
     @Autowired
@@ -34,6 +35,7 @@ public class AuthController {
     @PostMapping(path = "/login")
     @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
     @ResponseBody
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public GlobalResponse login(@RequestBody AuthRequest authRequest, @RequestParam("grant_type") String grantType) throws AuthException {
         AuthUserLoggedIn user = authValidator.validate(authRequest, grantType);
         AuthResponse authResponse = authService.login(user);
