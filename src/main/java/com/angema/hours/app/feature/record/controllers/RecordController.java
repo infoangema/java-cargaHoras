@@ -40,7 +40,7 @@ public class RecordController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Record> save(@Valid @RequestBody Record data, BindingResult bindingResult) {
+    public ResponseEntity<Record> save(@RequestBody Record data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.saveRecord(data);
         return ResponseEntity.ok().body(record);
@@ -54,7 +54,7 @@ public class RecordController {
         return ResponseEntity.ok().body(record);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);

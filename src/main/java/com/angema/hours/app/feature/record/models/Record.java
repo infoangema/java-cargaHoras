@@ -2,6 +2,8 @@ package com.angema.hours.app.feature.record.models;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
+import com.angema.hours.app.feature.project.models.Project;
+import com.angema.hours.app.feature.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +37,11 @@ public class Record implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
-    @NotBlank(message = Messages.ERROR_NULL_USER)
-    private String user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @NotBlank(message = Messages.ERROR_NULL_PROJECT)
-    private String project;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 }

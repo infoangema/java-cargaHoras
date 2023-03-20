@@ -28,7 +28,9 @@ public class RecordService {
     }
 
     public Record getIdRecord(final Long id) {
+
         Optional<Record> record = recordRepository.findById(id);
+
         if (record.isPresent()) {
             return record.get();
         } else {
@@ -37,6 +39,8 @@ public class RecordService {
     }
 
     public Record saveRecord(Record record) {
+
+
         try {
             return recordRepository.save(record);
         } catch (Exception e) {

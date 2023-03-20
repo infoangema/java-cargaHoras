@@ -40,7 +40,7 @@ public class ProjectController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Project> save(@Valid @RequestBody Project data, BindingResult bindingResult) {
+    public ResponseEntity<Project> save( @RequestBody Project data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.saveProject(data);
         return ResponseEntity.ok().body(project);
@@ -56,7 +56,7 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Project> update(@Valid @RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public ResponseEntity<Project> update(@RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.getIdProject(id);
         project.setName(data.getName());

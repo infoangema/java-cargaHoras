@@ -2,9 +2,7 @@ package com.angema.hours.app.feature.user;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,7 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -44,6 +43,7 @@ public class User implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String phone;
 
+    @NotBlank(message = Messages.ERROR_NULL_PHONE)
     private String rol;
 
     private boolean status;
