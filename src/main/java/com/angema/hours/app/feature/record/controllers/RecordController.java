@@ -25,21 +25,21 @@ public class RecordController {
     private ExceptionService exceptionService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Record>> getAll() {
         List<Record> record = recordService.getAllRecord();
         return ResponseEntity.ok().body(record);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Record> getId(@PathVariable("id") Long id) {
         Record record = recordService.getIdRecord(id);
         return ResponseEntity.ok().body(record);
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Record> save(@RequestBody Record data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.saveRecord(data);
@@ -47,7 +47,7 @@ public class RecordController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Record> delete(@PathVariable("id") Long id) {
         Record record = recordService.getIdRecord(id);
         recordService.deleteRecord(record);
@@ -55,7 +55,7 @@ public class RecordController {
     }
 
     @PostMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.getIdRecord(id);

@@ -24,7 +24,7 @@ public class UserController {
     private ExceptionService exceptionService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAll() {
         List<User> user = userService.getAllUser();
         return ResponseEntity.ok().body(user);
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public User getId(@PathVariable("id") Long id) {
         return userService.getIdUser(id);
     }
@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public User save(@Valid @RequestBody User data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         return userService.saveUser(data);
@@ -50,7 +50,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public String delete(@PathVariable("id") Long id) {
         User user = userService.getIdUser(id);
         userService.deleteUser(user);
@@ -60,7 +60,7 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public User update(@Valid @RequestBody User data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         User user = userService.getIdUser(id);

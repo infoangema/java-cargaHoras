@@ -25,21 +25,21 @@ public class ProjectController {
     private ExceptionService exceptionService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Project>> getAll() {
         List<Project> project = projectService.getAllProject();
         return ResponseEntity.ok().body(project);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Project> getId(@PathVariable("id") Long id) {
         Project project = projectService.getIdProject(id);
         return ResponseEntity.ok().body(project);
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Project> save( @RequestBody Project data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.saveProject(data);
@@ -47,7 +47,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Project> delete(@PathVariable("id") Long id) {
         Project project = projectService.getIdProject(id);
         projectService.deleteProject(project);
@@ -55,7 +55,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Project> update(@RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.getIdProject(id);
