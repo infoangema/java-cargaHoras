@@ -39,7 +39,7 @@ public class Record implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Auth user;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
