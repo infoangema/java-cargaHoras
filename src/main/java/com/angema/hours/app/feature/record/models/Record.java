@@ -2,8 +2,8 @@ package com.angema.hours.app.feature.record.models;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
+import com.angema.hours.app.core.auth.Auth;
 import com.angema.hours.app.feature.project.models.Project;
-import com.angema.hours.app.feature.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
