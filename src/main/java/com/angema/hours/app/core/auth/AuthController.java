@@ -54,8 +54,8 @@ public class AuthController {
     @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
     @ResponseBody
     public GlobalResponse getUserRoles() {
-        List<Auth> users = authService.getUsers();
-        return globalResponseService.response(users, "/auth/user");
+        List<Auth> user = authService.getUsers();
+        return globalResponseService.response(user, "/auth/user");
     }
 
     @GetMapping()

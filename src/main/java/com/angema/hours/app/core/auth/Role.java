@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,10 +13,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public String id;
-
     public String description;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
-    public List<Auth> auths = new ArrayList<>();
 
 }

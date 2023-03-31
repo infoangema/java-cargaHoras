@@ -19,7 +19,7 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public String id;
+    public Long id;
 
     public String userName;
 
@@ -37,10 +37,7 @@ public class Auth {
 
     public boolean active = true;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "auth_roles",
-            joinColumns = @JoinColumn(name = "auth_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public List<Role> roles = new ArrayList<>();
+    @Transient
+    public List<String> roles = new ArrayList<>();
 
 }

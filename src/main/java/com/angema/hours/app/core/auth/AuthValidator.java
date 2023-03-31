@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
+
 import java.util.*;
 
 @Component
@@ -45,7 +46,7 @@ public class AuthValidator {
 
     public AuthUserLoggedIn validate(AuthRequest authRequest, String grantType) throws AuthException {
 
-        if (grantType.isEmpty() || !grantType.equals(CLIENT_CREDENTIALS)) {
+        if (!grantType.equals(CLIENT_CREDENTIALS)) {
             message("Invalid grant_type");
         }
 
@@ -58,8 +59,16 @@ public class AuthValidator {
             message("Invalid user or password");
         }
 
-        Auth user = userOpt.get();
+        Auth user = userOpt.get();//auth
 
+        // todo buscar roles
+        Optional<String> rolOpt = authRepository.findRoleById(user.id.toString());
+        if (!rolOpt.isPresent()) {
+            message("Invalid rol");
+        }
+        //query.setMaxResults(1).uniqueResult()
+        List<String> roles = Collections.singletonList(rolOpt.get());
+        user.roles = roles;
         // get day of Date now
 //        Date date = new Date(); // your date
 //        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(TIMEZONE));
@@ -73,17 +82,17 @@ public class AuthValidator {
 //        if (!userName.equals(USERNAME_KEY + day) || !password.equals(PASSWORD_KEY + hour)) {
 //            message("Invalid user or password");
 //        }
-        List<String> roles = new ArrayList<>();
-        user.roles.forEach(role -> roles.add(role.name));
-        user.roles.forEach( r -> {
-            roles.add(r.name);
-        });
+//        List<String> roles = new ArrayList<>();
+//        user.roles.forEach(role -> roles.add(role.name));
+//        user.roles.forEach( r -> {
+//            roles.add(r.name);
+//        });
         return AuthUserLoggedIn.builder()
-                .userName(user.userName)
+                .userName(user.userName) //auth //user
                 .name(user.name)
                 .lastName(user.lastName)
                 .email(user.email)
-                .roles(roles)
+                .roles(user.roles)
                 .build();
     }
 
