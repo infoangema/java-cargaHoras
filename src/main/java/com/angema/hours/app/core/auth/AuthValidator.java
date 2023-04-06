@@ -61,14 +61,6 @@ public class AuthValidator {
 
         Auth user = userOpt.get();//auth
 
-        // todo buscar roles
-        Optional<String> rolOpt = authRepository.findRoleById(user.id.toString());
-        if (!rolOpt.isPresent()) {
-            message("Invalid rol");
-        }
-        //query.setMaxResults(1).uniqueResult()
-        List<String> roles = Collections.singletonList(rolOpt.get());
-        user.roles = roles;
         // get day of Date now
 //        Date date = new Date(); // your date
 //        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(TIMEZONE));

@@ -15,5 +15,5 @@ public class AuthUserLoggedIn {
     @JsonProperty("lastname")
     public String lastName;
     public String email;
-    public List<String> roles;
+    public List<Role> roles;
 }

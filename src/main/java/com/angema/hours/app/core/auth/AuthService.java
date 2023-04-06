@@ -27,6 +27,9 @@ public class AuthService {
     private AuthRepository authRepository;
 
     public AuthResponse login(AuthUserLoggedIn user) {
+        user.roles.stream().forEach( role -> {
+            role.auths = null;
+        });
 
         AuthResponse response = AuthResponse.builder()
                 .tokenType("Bearer")

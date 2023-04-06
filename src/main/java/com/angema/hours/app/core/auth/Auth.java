@@ -2,6 +2,7 @@ package com.angema.hours.app.core.auth;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,7 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public Long id;
+    public Integer id;
 
     public String userName;
 
@@ -37,7 +38,11 @@ public class Auth {
 
     public boolean active = true;
 
-    @Transient
-    public List<String> roles = new ArrayList<>();
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "auth_roles",
+            joinColumns = @JoinColumn(name = "auth_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    public List<Role> roles = new ArrayList<>();
 
 }
