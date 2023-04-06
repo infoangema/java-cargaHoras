@@ -50,7 +50,7 @@ public class AuthController {
         return globalResponseService.response(authResponse, "/auth/login");
     }
 
-    @GetMapping(path = "/user")
+    @GetMapping(path = "/users")
     @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
     @ResponseBody
     public GlobalResponse getUserRoles() {
