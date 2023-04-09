@@ -26,6 +26,9 @@ public class AuthService {
     @Autowired
     private AuthRepository authRepository;
 
+    // DOC | AUTH | PASO-5:
+    // genera token y response
+
     public AuthResponse login(AuthUserLoggedIn user) {
         user.roles.stream().forEach( role -> {
             role.auths = null;

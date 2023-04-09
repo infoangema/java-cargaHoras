@@ -16,7 +16,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public Integer id;
-    public Integer description;
+    public String description;
 
     @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")

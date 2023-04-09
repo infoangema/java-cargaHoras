@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface AuthRepository extends JpaRepository<Auth, Long> {
-    Optional<Auth> findByEmailAndPassword(String user, String password);
+    Optional<Auth> findByEmailAndPasswordAndActiveTrue(String user, String password);
 
     @Query(value= "select ar.role_id from auth_roles ar where auth_id = ?1", nativeQuery = true)
     Optional<String> findRoleById(String idRole);

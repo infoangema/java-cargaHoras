@@ -26,7 +26,7 @@ public class AuthUserDetail implements UserDetails {
 
     public static AuthUserDetail build(Auth usuario) {
         List<GrantedAuthority> authorities =
-                usuario.roles.stream().map(rol -> new SimpleGrantedAuthority(rol.toString())).collect(Collectors.toList());
+                usuario.roles.stream().map(rol -> new SimpleGrantedAuthority(rol.description)).collect(Collectors.toList());
         return new AuthUserDetail(usuario.name, usuario.userName, usuario.email, usuario.password, authorities);
     }
 

@@ -26,6 +26,7 @@ public class AuthJwt {
     @Value("${configs.auth.issuer:none}")
     private String ISSUER;
 
+    // DOC | AUTH | PASO-5b:
     public String generateToken(Object obj) {
         String subject = GsonUtil.serialize(obj);
         Signer signer = HMACSigner.newSHA256Signer(SECRET);

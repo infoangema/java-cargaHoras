@@ -29,11 +29,11 @@ public class AuthValidator {
     public AuthUserLoggedIn validate(MultiValueMap<String, String> formParams, String grantType) throws AuthException {
 
         if (grantType.isEmpty() || !grantType.equals(CLIENT_CREDENTIALS)) {
-            message("Invalid grant_type");
+            messageException("Invalid grant_type");
         }
 
         if (Objects.isNull(formParams) || formParams.getFirst("client_id").equals("") || formParams.getFirst("client_secret").equals("")) {
-            message("Invalid client_id or client_secret");
+            messageException("Invalid client_id or client_secret");
         }
 
         return AuthUserLoggedIn.builder()
@@ -44,19 +44,22 @@ public class AuthValidator {
                 .build();
     }
 
+    // DOC | AUTH | PASO-4:
+    // Valida request y datos del login y returns AuthUserLoggedIn
+
     public AuthUserLoggedIn validate(AuthRequest authRequest, String grantType) throws AuthException {
 
         if (!grantType.equals(CLIENT_CREDENTIALS)) {
-            message("Invalid grant_type");
+            messageException("Invalid grant_type");
         }
 
         if (isNull(authRequest)) {
-            message("Invalid user or password");
+            messageException("Invalid user or password");
         }
 
-        Optional<Auth> userOpt = authRepository.findByEmailAndPassword(authRequest.email, authRequest.password);
+        Optional<Auth> userOpt = authRepository.findByEmailAndPasswordAndActiveTrue(authRequest.email, authRequest.password);
         if (!userOpt.isPresent()) {
-            message("Invalid user or password");
+            messageException("Invalid user or password");
         }
 
         Auth user = userOpt.get();//auth
@@ -96,7 +99,7 @@ public class AuthValidator {
                 || authRequest.password.equals("");
     }
 
-    public void message(String message) throws AuthException {
+    public void messageException(String message) throws AuthException {
         throw new AuthException(message);
     }
 }

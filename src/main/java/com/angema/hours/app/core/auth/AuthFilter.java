@@ -20,6 +20,8 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     AuthUserDetailsService authUserDetailsService;
 
+    // DOC | AUTH | PASO-1:
+    // Intercepta todas las requests entrantes, deja pasar las que no tienen token y verifica token las que si.
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         try {

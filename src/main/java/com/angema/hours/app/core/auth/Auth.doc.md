@@ -57,7 +57,6 @@ configs.auth.exclude.paths=/auth/login,/health,/info,/error
   method: "POST",
   headers: {
     "Content-Type": "application/json"
-    "Authorization": "Bearer <token>"
   },
   curl: "curl --location --request POST 'http://localhost:8080/auth?grant_type=client_credentials' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n    \"user\": \"angema_devs11\",\n    \"password\": \"Secret..11\"\n}'"
 }

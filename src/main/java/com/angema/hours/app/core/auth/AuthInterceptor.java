@@ -8,6 +8,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+
+// DOC | AUTH | PASO-2:
+// Intercepta todas las requests entrantes, valida los paths autorizados en el application.properties y valida el token.
+
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 

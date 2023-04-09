@@ -25,7 +25,7 @@ public class ProjectController {
     private ExceptionService exceptionService;
 
     @GetMapping()
-   // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Project>> getAll() {
         List<Project> project = projectService.getAllProject();
         return ResponseEntity.ok().body(project);

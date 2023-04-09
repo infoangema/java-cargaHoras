@@ -40,10 +40,13 @@ public class AuthController {
         return globalResponseService.response(token, "/auth/login");
     }
 
+    // DOC | AUTH | PASO-3:
+    // Recibe requests, valida datos contra la base de datos y return objecto AuthResponse con usuario y token incluido
     @PostMapping(path = "/login")
     @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
     @ResponseBody
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+
     public GlobalResponse login(@RequestBody AuthRequest authRequest, @RequestParam("grant_type") String grantType) throws AuthException {
         AuthUserLoggedIn user = authValidator.validate(authRequest, grantType);
         AuthResponse authResponse = authService.login(user);
