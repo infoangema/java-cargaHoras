@@ -46,3 +46,24 @@ public class Auth {
     public List<Role> roles = new ArrayList<>();
 
 }
+
+
+/*
+Auth {
+    "id": 1, ##
+    "userName": "facuña",
+    "name": "facundo",
+    "userName": "acuña",
+    "email": "facuna30@gmail.com",
+    "password": "120383..fa",
+    "active": true,
+    roles: [
+        {
+            "id": 1##
+            "description": "ADMIN"
+        }
+
+    ]
+}
+
+*/
