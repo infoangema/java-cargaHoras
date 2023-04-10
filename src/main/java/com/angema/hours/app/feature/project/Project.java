@@ -1,13 +1,9 @@
-package com.angema.hours.app.feature.project.models;
+package com.angema.hours.app.feature.project;
 
-import com.angema.hours.app.core.Constant;
-import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.company.models.Company;
+import com.angema.hours.app.feature.company.Company;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data

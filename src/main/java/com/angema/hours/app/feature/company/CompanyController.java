@@ -1,12 +1,9 @@
-package com.angema.hours.app.feature.company.controllers;
+package com.angema.hours.app.feature.company;
 
 import com.angema.hours.app.core.exceptions.ExceptionService;
-import com.angema.hours.app.feature.company.models.Company;
-import com.angema.hours.app.feature.company.services.CompanyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

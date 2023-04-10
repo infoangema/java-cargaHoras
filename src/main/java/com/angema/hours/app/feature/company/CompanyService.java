@@ -1,8 +1,8 @@
-package com.angema.hours.app.feature.company.services;
+package com.angema.hours.app.feature.company;
 
 import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.company.models.Company;
-import com.angema.hours.app.feature.company.repositories.CompanyRepository;
+import com.angema.hours.app.feature.company.Company;
+import com.angema.hours.app.feature.company.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

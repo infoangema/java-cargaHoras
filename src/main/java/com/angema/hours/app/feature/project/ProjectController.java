@@ -1,8 +1,6 @@
-package com.angema.hours.app.feature.project.controllers;
+package com.angema.hours.app.feature.project;
 
 import com.angema.hours.app.core.exceptions.ExceptionService;
-import com.angema.hours.app.feature.project.models.Project;
-import com.angema.hours.app.feature.project.services.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j

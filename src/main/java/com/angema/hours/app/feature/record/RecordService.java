@@ -1,8 +1,8 @@
-package com.angema.hours.app.feature.record.services;
+package com.angema.hours.app.feature.record;
 
 import com.angema.hours.app.core.Messages;
-import com.angema.hours.app.feature.record.models.Record;
-import com.angema.hours.app.feature.record.repositories.RecordRepository;
+import com.angema.hours.app.feature.record.Record;
+import com.angema.hours.app.feature.record.RecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,9 @@
-package com.angema.hours.app.feature.record.models;
+package com.angema.hours.app.feature.record;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.core.auth.Auth;
-import com.angema.hours.app.feature.project.models.Project;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.angema.hours.app.feature.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

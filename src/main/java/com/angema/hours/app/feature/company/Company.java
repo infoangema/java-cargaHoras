@@ -1,4 +1,4 @@
-package com.angema.hours.app.feature.company.models;
+package com.angema.hours.app.feature.company;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
