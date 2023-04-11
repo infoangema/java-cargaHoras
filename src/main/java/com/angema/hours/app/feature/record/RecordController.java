@@ -4,6 +4,7 @@ import com.angema.hours.app.core.exceptions.ExceptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class RecordController {
     }
 
     @PostMapping()
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Record> save(@RequestBody Record data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Record record = recordService.saveRecord(data);

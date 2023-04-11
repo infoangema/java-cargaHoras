@@ -2,6 +2,7 @@ package com.angema.hours.app.core.auth;
 
 import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,24 +47,3 @@ public class Auth {
     public List<Role> roles = new ArrayList<>();
 
 }
-
-
-/*
-Auth {
-    "id": 1, ##
-    "userName": "facuña",
-    "name": "facundo",
-    "userName": "acuña",
-    "email": "facuna30@gmail.com",
-    "password": "120383..fa",
-    "active": true,
-    roles: [
-        {
-            "id": 1##
-            "description": "ADMIN"
-        }
-
-    ]
-}
-
-*/

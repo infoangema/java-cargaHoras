@@ -30,32 +30,32 @@ public class CompanyController {
         return ResponseEntity.ok().body(company);
     }
 
-    @GetMapping()
-    //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Company>> getAll() {
+    @GetMapping("/read")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<Company>> read() {
         List<Company> company = companyService.getAllCompany();
         return ResponseEntity.ok().body(company);
     }
 
-    @GetMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Company> getId(@PathVariable("id") Long id) {
+    @GetMapping("/read/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Company> readById(@PathVariable("id") Long id) {
         Company company = companyService.getIdCompany(id);
         return ResponseEntity.ok().body(company);
     }
 
 
 
-    @DeleteMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Company> delete(@PathVariable("id") Long id) {
         Company company = companyService.getIdCompany(id);
         companyService.deleteCompany(company);
         return ResponseEntity.ok().body(company);
     }
 
-    @PutMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Company> update(@Valid @RequestBody Company data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Company company = companyService.getIdCompany(id);

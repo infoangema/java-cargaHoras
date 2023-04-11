@@ -4,9 +4,7 @@ import com.angema.hours.app.core.Constant;
 import com.angema.hours.app.core.Messages;
 import com.angema.hours.app.core.auth.Auth;
 import com.angema.hours.app.feature.project.Project;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +12,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -37,7 +36,7 @@ public class Record implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
     private String description;
 
-    @ManyToOne
+   @ManyToOne
     @JoinColumn(name = "user_id")
     private Auth user;
 

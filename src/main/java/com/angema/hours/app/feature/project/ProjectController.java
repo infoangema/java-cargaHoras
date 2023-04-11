@@ -34,32 +34,32 @@ public class ProjectController {
         return ResponseEntity.ok().body(project);
     }
 
-    @GetMapping()
+    @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse getAll() {
+    public GlobalResponse read() {
         List<Project> project = projectService.getAllProject();
         return globalResponseService.responseOK(project);
     }
 
-    @GetMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Project> getId(@PathVariable("id") Long id) {
+    @GetMapping("/read/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Project> readById(@PathVariable("id") Long id) {
         Project project = projectService.getIdProject(id);
         return ResponseEntity.ok().body(project);
     }
 
 
 
-    @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Project> delete(@PathVariable("id") Long id) {
         Project project = projectService.getIdProject(id);
         projectService.deleteProject(project);
         return ResponseEntity.ok().body(project);
     }
 
-    @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/read/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Project> update(@RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         Project project = projectService.getIdProject(id);
