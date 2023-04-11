@@ -18,7 +18,7 @@ public class GlobalResponseService {
         response.body = obj;
         response.status = HttpStatus.OK;
         response.path = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest().getRequestURI();;
+                .getRequest().getRequestURI();
         response.error = null;
         response.timestamp = dateUtil.getDateString();
         return response;

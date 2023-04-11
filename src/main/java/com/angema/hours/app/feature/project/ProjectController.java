@@ -28,45 +28,45 @@ public class ProjectController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Project> create( @RequestBody Project data, BindingResult bindingResult) {
+    public ResponseEntity<ProjectDto> create( @RequestBody ProjectDto data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
-        Project project = projectService.saveProject(data);
-        return ResponseEntity.ok().body(project);
+        ProjectDto projectDto = projectService.saveProject(data);
+        return ResponseEntity.ok().body(projectDto);
     }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse read() {
-        List<Project> project = projectService.getAllProject();
-        return globalResponseService.responseOK(project);
+        List<ProjectDto> projectDto = projectService.getAllProject();
+        return globalResponseService.responseOK(projectDto);
     }
 
     @GetMapping("/read/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Project> readById(@PathVariable("id") Long id) {
-        Project project = projectService.getIdProject(id);
-        return ResponseEntity.ok().body(project);
+    public ResponseEntity<ProjectDto> readById(@PathVariable("id") Long id) {
+        ProjectDto projectDto = projectService.getProjectDtoById(id);
+        return ResponseEntity.ok().body(projectDto);
     }
 
 
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Project> delete(@PathVariable("id") Long id) {
-        Project project = projectService.getIdProject(id);
-        projectService.deleteProject(project);
-        return ResponseEntity.ok().body(project);
+    public ResponseEntity<ProjectDto> delete(@PathVariable("id") Long id) {
+        ProjectDto projectDto = projectService.getProjectDtoById(id);
+        projectService.deleteProject(projectDto);
+        return ResponseEntity.ok().body(projectDto);
     }
 
     @PutMapping("/read/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Project> update(@RequestBody Project data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public ResponseEntity<ProjectDto> update(@RequestBody ProjectDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+
         exceptionService.collectErrorsBindings(bindingResult);
-        Project project = projectService.getIdProject(id);
-        project.setName(data.getName());
-        project.setDescription(data.getDescription());
-        project.setCompany(data.getCompany());
-        Project userUpdated = projectService.saveProject(data);
-        return ResponseEntity.ok().body(userUpdated);
+        ProjectDto projectDto = projectService.getProjectDtoById(id);
+        // todo: response error
+        data.id = projectDto.id;
+        data = projectService.saveProject(data);
+        return ResponseEntity.ok().body(data);
     }
 }
