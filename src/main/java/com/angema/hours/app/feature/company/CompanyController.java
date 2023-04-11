@@ -4,6 +4,7 @@ import com.angema.hours.app.core.exceptions.ExceptionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,14 @@ public class CompanyController {
     @Autowired
     private ExceptionService exceptionService;
 
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Company> create(@Valid @RequestBody Company data, BindingResult bindingResult) {
+        exceptionService.collectErrorsBindings(bindingResult);
+        Company company = companyService.saveCompany(data);
+        return ResponseEntity.ok().body(company);
+    }
+
     @GetMapping()
     //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Company>> getAll() {
@@ -35,13 +44,7 @@ public class CompanyController {
         return ResponseEntity.ok().body(company);
     }
 
-    @PostMapping()
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Company> save(@Valid @RequestBody Company data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
-        Company company = companyService.saveCompany(data);
-        return ResponseEntity.ok().body(company);
-    }
+
 
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")

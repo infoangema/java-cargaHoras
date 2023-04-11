@@ -37,7 +37,7 @@ public class AuthController {
     public GlobalResponse login(@RequestBody MultiValueMap<String, String> formParams, @RequestParam("grant_type") String grantType) throws AuthException {
         AuthUserLoggedIn user = authValidator.validate(formParams, grantType);
         AuthResponse token = authService.login(user);
-        return globalResponseService.response(token, "/auth/login");
+        return globalResponseService.responseOK(token);
     }
 
     // DOC | AUTH | PASO-3:
@@ -50,7 +50,7 @@ public class AuthController {
     public GlobalResponse login(@RequestBody AuthRequest authRequest, @RequestParam("grant_type") String grantType) throws AuthException {
         AuthUserLoggedIn user = authValidator.validate(authRequest, grantType);
         AuthResponse authResponse = authService.login(user);
-        return globalResponseService.response(authResponse, "/auth/login");
+        return globalResponseService.responseOK(authResponse);
     }
 
     @GetMapping(path = "/users")
@@ -58,7 +58,7 @@ public class AuthController {
     @ResponseBody
     public GlobalResponse getUserRoles() {
         List<Auth> user = authService.getUsers();
-        return globalResponseService.response(user, "/auth/user");
+        return globalResponseService.responseOK(user);
     }
 
     @GetMapping()

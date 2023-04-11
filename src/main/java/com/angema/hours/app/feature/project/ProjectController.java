@@ -1,6 +1,8 @@
 package com.angema.hours.app.feature.project;
 
 import com.angema.hours.app.core.exceptions.ExceptionService;
+import com.angema.hours.app.core.globalResponse.GlobalResponse;
+import com.angema.hours.app.core.globalResponse.GlobalResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/proyectos")
+@RequestMapping("/projects")
 public class ProjectController {
 
     @Autowired
@@ -21,11 +23,22 @@ public class ProjectController {
     @Autowired
     private ExceptionService exceptionService;
 
+    @Autowired
+    private GlobalResponseService globalResponseService;
+
+    @PostMapping()
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Project> create( @RequestBody Project data, BindingResult bindingResult) {
+        exceptionService.collectErrorsBindings(bindingResult);
+        Project project = projectService.saveProject(data);
+        return ResponseEntity.ok().body(project);
+    }
+
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<Project>> getAll() {
+    public GlobalResponse getAll() {
         List<Project> project = projectService.getAllProject();
-        return ResponseEntity.ok().body(project);
+        return globalResponseService.responseOK(project);
     }
 
     @GetMapping("/{id}")
@@ -35,13 +48,7 @@ public class ProjectController {
         return ResponseEntity.ok().body(project);
     }
 
-    @PostMapping()
-    //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Project> save( @RequestBody Project data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
-        Project project = projectService.saveProject(data);
-        return ResponseEntity.ok().body(project);
-    }
+
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasRole('ADMIN')")
