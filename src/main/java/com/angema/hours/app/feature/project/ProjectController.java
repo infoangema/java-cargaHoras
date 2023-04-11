@@ -26,7 +26,7 @@ public class ProjectController {
     @Autowired
     private GlobalResponseService globalResponseService;
 
-    @PostMapping()
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Project> create( @RequestBody Project data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
