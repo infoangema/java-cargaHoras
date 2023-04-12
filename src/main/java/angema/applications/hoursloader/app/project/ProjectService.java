@@ -66,7 +66,8 @@ public class ProjectService {
         project.id = projectDto.id;
         project.name = projectDto.name;
         project.description = projectDto.description;
-        project.company = projectDto.company;
+        // todo: corregir dto de company.
+//        project.company = projectDto.company;
         project.status = projectDto.status;
         return project;
     }
@@ -76,7 +77,7 @@ public class ProjectService {
         projectDto.id = project.id;
         projectDto.name = project.name;
         projectDto.description = project.description;
-        projectDto.company = project.company;
+//        projectDto.company = project.company;
         projectDto.status = project.status;
         return projectDto;
     }

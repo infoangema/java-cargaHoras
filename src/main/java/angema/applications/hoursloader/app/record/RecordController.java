@@ -1,6 +1,8 @@
 package angema.applications.hoursloader.app.record;
 
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
+import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
+import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,47 +24,51 @@ public class RecordController {
     @Autowired
     private ExceptionService exceptionService;
 
+    @Autowired
+    private GlobalResponseService globalResponseService;
+
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponse create(@Valid @RequestBody RecordDto data, BindingResult bindingResult) {
+        exceptionService.collectErrorsBindings(bindingResult);
+        data = recordService.saveRecord(data);
+        return globalResponseService.responseOK(data);
+    }
+
     @GetMapping()
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Record>> getAll() {
+    public GlobalResponse getAll() {
         List<Record> record = recordService.getAllRecord();
-        return ResponseEntity.ok().body(record);
+        return globalResponseService.responseOK(record);
     }
 
     @GetMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Record> getId(@PathVariable("id") Long id) {
+    public GlobalResponse getId(@PathVariable("id") Long id) {
         Record record = recordService.getIdRecord(id);
-        return ResponseEntity.ok().body(record);
+        return globalResponseService.responseOK(record);
     }
 
-    @PostMapping()
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Record> save(@RequestBody Record data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
-        Record record = recordService.saveRecord(data);
-        return ResponseEntity.ok().body(record);
-    }
 
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Record> delete(@PathVariable("id") Long id) {
+    public GlobalResponse delete(@PathVariable("id") Long id) {
         Record record = recordService.getIdRecord(id);
         recordService.deleteRecord(record);
-        return ResponseEntity.ok().body(record);
+        return globalResponseService.responseOK(record);
     }
 
     @PostMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Record> update(@Valid @RequestBody Record data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public GlobalResponse update(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
-        Record record = recordService.getIdRecord(id);
-        record.setDate(data.getDate());
-        record.setHours(data.getHours());
-        record.setDescription(data.getDescription());
-        record.setUser(data.getUser());
-        record.setProject(data.getProject());
-        Record userUpdated = recordService.saveRecord(record);
-        return ResponseEntity.ok().body(userUpdated);
+//        Record record = recordService.getIdRecord(id);
+//        record.setDate(data.getDate());
+//        record.setHours(data.getHours());
+//        record.setDescription(data.getDescription());
+//        record.setUser(data.getUser());
+//        record.setProject(data.getProject());
+//        Record userUpdated = recordService.saveRecord(record);
+        return globalResponseService.responseOK(data);
     }
 }

@@ -1,6 +1,10 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.project.Project;
+import angema.applications.hoursloader.app.project.ProjectDto;
+import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.core.Messages;
+import angema.applications.hoursloader.core.auth.Auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,11 +40,12 @@ public class RecordService {
         }
     }
 
-    public Record saveRecord(Record record) {
-
+    public RecordDto saveRecord(RecordDto recordDto) {
 
         try {
-            return recordRepository.save(record);
+            Record record = recordRepository.save(mapDtoToRecord(recordDto));
+            recordDto = mapRecordToDto(record);
+            return recordDto;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
@@ -52,5 +57,42 @@ public class RecordService {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND, e);
         }
+    }
+
+    private static Record mapDtoToRecord(RecordDto recordDto) {
+        Record record = new Record();
+
+        record.id = recordDto.id;
+        record.date = recordDto.date;
+        record.hours = recordDto.hours;
+        record.description = recordDto.description;
+
+        Auth user = new Auth();
+        user.id = recordDto.user.id;
+        record.user = user;
+
+        Project project = new Project();
+        project.id = recordDto.project.id;
+        record.project = project;
+
+        return record;
+    }
+    private static RecordDto mapRecordToDto(Record record) {
+        RecordDto recordDto = new RecordDto();
+
+        recordDto.id = record.id;
+        recordDto.date = record.date;
+        recordDto.hours = record.hours;
+        recordDto.description = record.description;
+
+        UserDto user = new UserDto();
+        user.id = record.user.id;
+        recordDto.user = user;
+
+        ProjectDto project = new ProjectDto();
+        project.id = record.project.id;
+        recordDto.project = project;
+
+        return recordDto;
     }
 }
