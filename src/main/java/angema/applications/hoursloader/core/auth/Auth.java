@@ -20,7 +20,7 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    public Integer id;
+    public Long id;
 
     public String userName;
 

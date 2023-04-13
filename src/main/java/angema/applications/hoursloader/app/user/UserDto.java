@@ -12,12 +12,11 @@ import java.util.List;
 
 public class UserDto {
 
-    public Integer id;
+    public Long id;
     public String userName;
     public String name;
     public String lastName;
     public String email;
-    public String password;
     public String phone;
     public boolean active = true;
     public List<RoleDto> roles = new ArrayList<>();

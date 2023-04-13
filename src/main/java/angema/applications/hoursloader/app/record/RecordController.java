@@ -1,5 +1,7 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.company.CompanyDto;
+import angema.applications.hoursloader.app.company.CompanyService;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
@@ -26,49 +28,47 @@ public class RecordController {
 
     @Autowired
     private GlobalResponseService globalResponseService;
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse create(@Valid @RequestBody RecordDto data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
-        data = recordService.saveRecord(data);
-        return globalResponseService.responseOK(data);
+        RecordDto recordDto = recordService.saveRecord(data);
+        return globalResponseService.responseOK(recordDto);
     }
 
-    @GetMapping()
-    //@PreAuthorize("hasRole('ADMIN')")
-    public GlobalResponse getAll() {
-        List<Record> record = recordService.getAllRecord();
-        return globalResponseService.responseOK(record);
+    @GetMapping("/read")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponse read() {
+        List<RecordDto> recordDtos = recordService.getAllRecord();
+        return globalResponseService.responseOK(recordDtos);
     }
 
-    @GetMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
-    public GlobalResponse getId(@PathVariable("id") Long id) {
-        Record record = recordService.getIdRecord(id);
-        return globalResponseService.responseOK(record);
+    @GetMapping("/read/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponse readById(@PathVariable("id") Long id) {
+        RecordDto recordDto = recordService.getRecordDtoById(id);
+        return globalResponseService.responseOK(recordDto);
     }
 
 
-    @DeleteMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse delete(@PathVariable("id") Long id) {
-        Record record = recordService.getIdRecord(id);
-        recordService.deleteRecord(record);
-        return globalResponseService.responseOK(record);
+        RecordDto recordDto = recordService.getRecordDtoById(id);
+        recordService.deleteRecord(recordDto);
+        return globalResponseService.responseOK(recordDto);
     }
 
-    @PostMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse update(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+
         exceptionService.collectErrorsBindings(bindingResult);
-//        Record record = recordService.getIdRecord(id);
-//        record.setDate(data.getDate());
-//        record.setHours(data.getHours());
-//        record.setDescription(data.getDescription());
-//        record.setUser(data.getUser());
-//        record.setProject(data.getProject());
-//        Record userUpdated = recordService.saveRecord(record);
+
+        RecordDto recordDto = recordService.getRecordDtoById(id);
+        data.id = id;
+
         return globalResponseService.responseOK(data);
     }
 }

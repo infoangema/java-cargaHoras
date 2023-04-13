@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class RoleDto {
 
+
     public Integer id;
     public String description;
 

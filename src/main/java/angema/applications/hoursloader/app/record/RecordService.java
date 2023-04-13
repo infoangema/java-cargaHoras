@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,44 +22,45 @@ public class RecordService {
     @Autowired
     private RecordRepository recordRepository;
 
-    public List<Record> getAllRecord() {
+    public List<RecordDto> getAllRecord() {
         try {
-            return recordRepository.findAll();
+            List<Record> companies = recordRepository.findAllByOrderByIdAsc();
+            List<RecordDto> recordDtos = new ArrayList<>();
+            companies.forEach(record -> recordDtos.add(mapRecordToDto(record)));
+            return recordDtos;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
 
-    public Record getIdRecord(final Long id) {
+    public RecordDto getRecordDtoById(final Long id) {
 
         Optional<Record> record = recordRepository.findById(id);
-
         if (record.isPresent()) {
-            return record.get();
+            return mapRecordToDto(record.get());
         } else {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND);
         }
     }
 
     public RecordDto saveRecord(RecordDto recordDto) {
 
+        Record record = mapDtoToRecord(recordDto);
+
         try {
-            Record record = recordRepository.save(mapDtoToRecord(recordDto));
-            recordDto = mapRecordToDto(record);
-            return recordDto;
+            return mapRecordToDto(recordRepository.save(record));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
 
-    public void deleteRecord(Record record) {
+    public void deleteRecord(RecordDto recordDto) {
         try {
-            recordRepository.delete(record);
+            recordRepository.delete(mapDtoToRecord(recordDto));
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_RECORD_NOT_FOUND, e);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND, e);
         }
     }
-
     private static Record mapDtoToRecord(RecordDto recordDto) {
         Record record = new Record();
 

@@ -1,5 +1,6 @@
 package angema.applications.hoursloader.app.user;
 
+import angema.applications.hoursloader.app.company.CompanyDto;
 import angema.applications.hoursloader.core.auth.*;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
@@ -38,7 +39,8 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse create(@Valid @RequestBody UserDto data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
-        return globalResponseService.responseOK(data);
+        UserDto userDto = userService.saveUser(data);
+        return globalResponseService.responseOK(userDto);
     }
 
     @GetMapping("/read")
@@ -72,7 +74,6 @@ public class UserController {
         UserDto user = userService.getUserDtoById(id);
 
         user.email = data.email;
-        user.password = data.password;
         user.name = data.name;
         user.userName = data.userName;
         user.phone = data.phone;
