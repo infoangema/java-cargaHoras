@@ -1,5 +1,6 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.user.User;
 import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
 import angema.applications.hoursloader.core.auth.Auth;
@@ -14,10 +15,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "records")
 public class Record implements Serializable {
 
     @Id
@@ -36,11 +34,11 @@ public class Record implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
     public String description;
 
-   @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
-    public Auth user;
+    public User user;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "project_id")
     public Project project;
 }

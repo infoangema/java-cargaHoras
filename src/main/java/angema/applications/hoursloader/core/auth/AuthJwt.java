@@ -55,9 +55,9 @@ public class AuthJwt {
     }
 
 
-    public AuthUserLoggedIn getPayLoadObject(String token) {
+    public Auth getPayLoadObject(String token) {
         String payload = getPayLoad(token);
-        return GsonUtil.toObject(payload, AuthUserLoggedIn.class);
+        return GsonUtil.toObject(payload, Auth.class);
     }
 
     private JWT jwt(String token) {

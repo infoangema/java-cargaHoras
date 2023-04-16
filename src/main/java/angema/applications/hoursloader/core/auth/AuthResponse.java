@@ -18,9 +18,9 @@ public class AuthResponse {
     public String refreshToken;
     @JsonProperty("issued_at")
     public String issuedAt;
-    @JsonProperty("client_id")
-    public String clientId;
-    @JsonProperty("client_data")
-    public AuthUserLoggedIn clientData;
+    @JsonProperty("auth_id")
+    public Long authId;
+    @JsonProperty("auth_data")
+    public AuthDto authDto;
 
 }

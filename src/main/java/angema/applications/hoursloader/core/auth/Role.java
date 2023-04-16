@@ -17,12 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public Integer id;
     public String description;
 
-    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     public List<Auth> auths = new ArrayList<>();
 }

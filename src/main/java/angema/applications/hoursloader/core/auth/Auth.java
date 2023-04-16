@@ -1,8 +1,8 @@
 package angema.applications.hoursloader.core.auth;
 
+import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,29 +16,16 @@ import java.util.List;
 @Setter
 @Entity
 public class Auth {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     public String userName;
 
-    public String name;
-
-    public String lastName;
-
-    public String email;
-
     public String password;
-
-    @Size(min = Constant.MIN_CHARACTER_PHONE, max = Constant.MAX_CHARACTER_PHONE, message = Messages.ERROR_PHONE)
-    @NotBlank(message = Messages.ERROR_NULL_PHONE)
-    public String phone;
 
     public boolean active = true;
 
-    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "auth_roles",
             joinColumns = @JoinColumn(name = "auth_id"),

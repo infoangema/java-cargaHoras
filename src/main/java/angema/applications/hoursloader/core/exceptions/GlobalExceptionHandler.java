@@ -21,12 +21,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<?> authException(AuthException ex, WebRequest request) {
         GlobalResponse response = new GlobalResponse();
+
         response.status = HttpStatus.UNAUTHORIZED;
         response.path = request.getDescription(false);
         response.timestamp = dateUtil.getDateString();
         response.body = null;
         response.error = ex.getMessage();
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        //GlobalResponse response = globalResponseService.badRequestResponse(ex.getMessage(), request );
+
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

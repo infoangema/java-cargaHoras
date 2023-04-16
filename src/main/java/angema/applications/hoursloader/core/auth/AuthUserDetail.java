@@ -18,16 +18,14 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AuthUserDetail implements UserDetails {
 
-    private String nombre;
-    private String nombreUsuario;
-    private String email;
+    private String userName;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
     public static AuthUserDetail build(Auth usuario) {
         List<GrantedAuthority> authorities =
                 usuario.roles.stream().map(role -> new SimpleGrantedAuthority(role.description)).collect(Collectors.toList());
-        return new AuthUserDetail(usuario.name, usuario.userName, usuario.email, usuario.password, authorities);
+        return new AuthUserDetail(usuario.userName, usuario.password, authorities);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class AuthUserDetail implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nombreUsuario;
+        return userName;
     }
 
     @Override

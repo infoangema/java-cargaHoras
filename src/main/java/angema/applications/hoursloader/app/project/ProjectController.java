@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class ProjectController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse create( @RequestBody ProjectDto data, BindingResult bindingResult) {
+    public GlobalResponse create(@Valid @RequestBody ProjectDto data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         ProjectDto projectDto = projectService.saveProject(data);
         return globalResponseService.responseOK(projectDto);
@@ -56,9 +57,9 @@ public class ProjectController {
         return globalResponseService.responseOK(projectDto);
     }
 
-    @PutMapping("/read/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@RequestBody ProjectDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public GlobalResponse update(@Valid @RequestBody ProjectDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
 
         exceptionService.collectErrorsBindings(bindingResult);
         ProjectDto projectDto = projectService.getProjectDtoById(id);

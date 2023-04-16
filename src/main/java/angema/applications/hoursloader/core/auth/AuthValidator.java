@@ -26,28 +26,10 @@ public class AuthValidator {
     }
 
 
-    public AuthUserLoggedIn validate(MultiValueMap<String, String> formParams, String grantType) throws AuthException {
-
-        if (grantType.isEmpty() || !grantType.equals(CLIENT_CREDENTIALS)) {
-            messageException("Invalid grant_type");
-        }
-
-        if (Objects.isNull(formParams) || formParams.getFirst("client_id").equals("") || formParams.getFirst("client_secret").equals("")) {
-            messageException("Invalid client_id or client_secret");
-        }
-
-        return AuthUserLoggedIn.builder()
-                .userName(formParams.getFirst("client_id"))
-                .name("Gerard")
-                .lastName("Palet")
-                .email("paletgerardo@gmail.com")
-                .build();
-    }
-
     // DOC | AUTH | PASO-4:
     // Valida request y datos del login y returns AuthUserLoggedIn
 
-    public AuthUserLoggedIn validate(AuthRequest authRequest, String grantType) throws AuthException {
+    public Auth validate(AuthRequest authRequest, String grantType) throws AuthException {
 
         if (!grantType.equals(CLIENT_CREDENTIALS)) {
             messageException("Invalid grant_type");
@@ -57,12 +39,12 @@ public class AuthValidator {
             messageException("Invalid user or password");
         }
 
-        Optional<Auth> userOpt = authRepository.findByEmailAndPasswordAndActiveTrue(authRequest.email, authRequest.password);
-        if (!userOpt.isPresent()) {
+        Optional<Auth> authOpt = authRepository.findByUserNameAndPasswordAndActiveTrue(authRequest.email, authRequest.password);
+        if (!authOpt.isPresent()) {
             messageException("Invalid user or password");
         }
 
-        Auth user = userOpt.get();//auth
+        Auth auth = authOpt.get();//auth
 
         // get day of Date now
 //        Date date = new Date(); // your date
@@ -82,13 +64,7 @@ public class AuthValidator {
 //        user.roles.forEach( r -> {
 //            roles.add(r.name);
 //        });
-        return AuthUserLoggedIn.builder()
-                .userName(user.userName) //auth //user
-                .name(user.name)
-                .lastName(user.lastName)
-                .email(user.email)
-                .roles(user.roles)
-                .build();
+        return auth;
     }
 
     private boolean isNull(AuthRequest authRequest) {

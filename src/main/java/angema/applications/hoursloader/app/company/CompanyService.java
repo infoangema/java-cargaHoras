@@ -24,7 +24,7 @@ public class CompanyService {
             companies.forEach(company -> companyDtos.add(mapCompanyToDto(company)));
             return companyDtos;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+            throw new CompanyException("Error al intentar guardar el servicio: " + e.getMessage());
         }
     }
 
@@ -49,8 +49,6 @@ public class CompanyService {
         }
     }
 
-
-
     public void deleteCompany(CompanyDto companyDto) {
         try {
             companyRepository.delete(mapDtoToCompany(companyDto));
@@ -73,7 +71,6 @@ public class CompanyService {
     public CompanyDto mapCompanyToDto(Company company) {
         try {
             CompanyDto companyDto = new CompanyDto();
-
             companyDto.id = company.id;
             companyDto.name = company.name;
             companyDto.description = company.description;

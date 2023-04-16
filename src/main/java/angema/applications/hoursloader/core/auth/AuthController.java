@@ -31,24 +31,14 @@ public class AuthController {
     @Autowired
     private ExceptionService exceptionService;
 
-    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
-    @ResponseBody
-    public GlobalResponse login(@RequestBody MultiValueMap<String, String> formParams, @RequestParam("grant_type") String grantType) throws AuthException {
-        AuthUserLoggedIn user = authValidator.validate(formParams, grantType);
-        AuthResponse token = authService.login(user);
-        return globalResponseService.responseOK(token);
-    }
-
     // DOC | AUTH | PASO-3:
     // Recibe requests, valida datos contra la base de datos y return objecto AuthResponse con usuario y token incluido
     @PostMapping(path = "/login")
     @ResponseStatus(value = org.springframework.http.HttpStatus.OK)
     @ResponseBody
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-
     public GlobalResponse login(@RequestBody AuthRequest authRequest, @RequestParam("grant_type") String grantType) throws AuthException {
-        AuthUserLoggedIn user = authValidator.validate(authRequest, grantType);
+        Auth user = authValidator.validate(authRequest, grantType);
         AuthResponse authResponse = authService.login(user);
         return globalResponseService.responseOK(authResponse);
     }

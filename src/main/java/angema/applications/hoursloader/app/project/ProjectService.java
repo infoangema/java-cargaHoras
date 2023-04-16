@@ -2,6 +2,7 @@ package angema.applications.hoursloader.app.project;
 
 
 import angema.applications.hoursloader.app.company.CompanyDto;
+import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class ProjectService {
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -54,8 +57,6 @@ public class ProjectService {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
-
-
 
     public void deleteProject(ProjectDto projectDto) {
         try {

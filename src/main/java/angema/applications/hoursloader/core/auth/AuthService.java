@@ -1,5 +1,6 @@
 package angema.applications.hoursloader.core.auth;
 
+import angema.applications.hoursloader.app.user.dtos.RoleDto;
 import angema.applications.hoursloader.core.utils.DateUtil;
 import angema.applications.hoursloader.core.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,26 +31,35 @@ public class AuthService {
     // DOC | AUTH | PASO-5:
     // genera token y response
 
-    public AuthResponse login(AuthUserLoggedIn user) {
-        user.roles.stream().forEach( role -> {
+    public AuthResponse login(Auth auth) {
+        auth.roles.stream().forEach( role -> {
             role.auths = null;
         });
 
+        List<RoleDto> roleDtos = new ArrayList<>();
+
+        auth.roles.stream().forEach( role -> {
+            RoleDto roleDto = new RoleDto(role.id, role.description);
+            roleDtos.add(roleDto);
+        });
+
+        AuthDto authDto = new AuthDto(auth.id, auth.userName, auth.active, roleDtos);
+
         AuthResponse response = AuthResponse.builder()
                 .tokenType("Bearer")
-                .accessToken(authJwt.generateToken(user))
+                .accessToken(authJwt.generateToken(auth))
                 .refreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
                 .issuedAt(dateUtil.getDateMillis() + "")
-                .clientId(user.userName)
+                .authId(auth.id)
                 .expiresIn(EXPIRATION_TIME)
-                .clientData(user)
+                .authDto(authDto)
                 .build();
         return response;
     }
 
-    public AuthUserLoggedIn getPayloadObject(String token) {
-        return authJwt.getPayLoadObject(token);
-    }
+//    public Auth getPayloadObject(String token) {
+//        return authJwt.getPayLoadObject(token);
+//    }
 
     public List<Auth> getUsers() {
         return authRepository.findAll();
@@ -62,7 +73,7 @@ public class AuthService {
         }
     }
 
-    public Auth getIdUser(final Long id) {
+    public Auth getAuthById(final Long id) {
         Optional<Auth> user = authRepository.findById(id);
         if (user.isPresent()) {
             return user.get();

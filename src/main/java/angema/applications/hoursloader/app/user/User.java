@@ -1,0 +1,46 @@
+package angema.applications.hoursloader.app.user;
+
+import angema.applications.hoursloader.app.project.Project;
+import angema.applications.hoursloader.core.Constant;
+import angema.applications.hoursloader.core.Messages;
+import angema.applications.hoursloader.core.auth.Auth;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "USERS")
+public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    public String name;
+
+    public String lastName;
+
+    public String email;
+
+    @Size(min = Constant.MIN_CHARACTER_PHONE, max = Constant.MAX_CHARACTER_PHONE, message = Messages.ERROR_PHONE)
+    @NotBlank(message = Messages.ERROR_NULL_PHONE)
+    public String phone;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_projects",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "projects_id"))
+    public List<Project> projects = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "auth_id")
+    public Auth auth;
+}

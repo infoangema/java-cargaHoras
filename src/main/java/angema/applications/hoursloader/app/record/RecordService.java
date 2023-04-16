@@ -2,9 +2,9 @@ package angema.applications.hoursloader.app.record;
 
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.app.project.ProjectDto;
+import angema.applications.hoursloader.app.user.User;
 import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.core.Messages;
-import angema.applications.hoursloader.core.auth.Auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class RecordService {
 
     public List<RecordDto> getAllRecord() {
         try {
-            List<Record> companies = recordRepository.findAllByOrderByIdAsc();
+            List<Record> records = recordRepository.findAllByOrderByIdAsc();
             List<RecordDto> recordDtos = new ArrayList<>();
-            companies.forEach(record -> recordDtos.add(mapRecordToDto(record)));
+            records.forEach(record -> recordDtos.add(mapRecordToDto(record)));
             return recordDtos;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
@@ -44,11 +44,10 @@ public class RecordService {
     }
 
     public RecordDto saveRecord(RecordDto recordDto) {
-
-        Record record = mapDtoToRecord(recordDto);
-
         try {
-            return mapRecordToDto(recordRepository.save(record));
+            Record record = mapDtoToRecord(recordDto);
+            record = recordRepository.save(record);
+            return mapRecordToDto(record);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
@@ -69,7 +68,7 @@ public class RecordService {
         record.hours = recordDto.hours;
         record.description = recordDto.description;
 
-        Auth user = new Auth();
+        User user = new User();
         user.id = recordDto.user.id;
         record.user = user;
 

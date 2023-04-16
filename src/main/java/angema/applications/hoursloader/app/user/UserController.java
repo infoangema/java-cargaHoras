@@ -1,16 +1,14 @@
 package angema.applications.hoursloader.app.user;
 
-import angema.applications.hoursloader.app.company.CompanyDto;
+
 import angema.applications.hoursloader.core.auth.*;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.MultiValueMap;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,16 +66,12 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@Valid @RequestBody Auth data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public GlobalResponse update(@Valid @RequestBody UserDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
-
-        UserDto user = userService.getUserDtoById(id);
-
-        user.email = data.email;
-        user.name = data.name;
-        user.userName = data.userName;
-        user.phone = data.phone;
-
-        return globalResponseService.responseOK(user);
+        UserDto userDto = userService.getUserDtoById(id);
+        // todo: response error
+        data.id = userDto.id;
+        data = userService.saveUser(data);
+        return globalResponseService.responseOK(data);
     }
 }

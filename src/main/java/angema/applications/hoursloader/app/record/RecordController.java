@@ -1,13 +1,11 @@
 package angema.applications.hoursloader.app.record;
 
-import angema.applications.hoursloader.app.company.CompanyDto;
-import angema.applications.hoursloader.app.company.CompanyService;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -65,10 +63,10 @@ public class RecordController {
     public GlobalResponse update(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
 
         exceptionService.collectErrorsBindings(bindingResult);
-
         RecordDto recordDto = recordService.getRecordDtoById(id);
-        data.id = id;
-
+        // todo: response error
+        data.id = recordDto.id;
+        data = recordService.saveRecord(data);
         return globalResponseService.responseOK(data);
     }
 }
