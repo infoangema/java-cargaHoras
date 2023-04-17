@@ -43,14 +43,14 @@ public class AuthService {
             roleDtos.add(roleDto);
         });
 
-        AuthDto authDto = new AuthDto(auth.id, auth.userName, auth.active, roleDtos);
+        AuthDto authDto = new AuthDto(auth.id, auth.userName, auth.active, auth.user.id, roleDtos);
 
         AuthResponse response = AuthResponse.builder()
                 .tokenType("Bearer")
-                .accessToken(authJwt.generateToken(auth))
+                .accessToken(authJwt.generateToken(authDto))
                 .refreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
                 .issuedAt(dateUtil.getDateMillis() + "")
-                .authId(auth.id)
+                .userId(auth.user.id)
                 .expiresIn(EXPIRATION_TIME)
                 .authDto(authDto)
                 .build();

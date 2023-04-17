@@ -1,14 +1,10 @@
 package angema.applications.hoursloader.core.auth;
 
-import angema.applications.hoursloader.app.project.Project;
-import angema.applications.hoursloader.core.Constant;
-import angema.applications.hoursloader.core.Messages;
+import angema.applications.hoursloader.app.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,5 +27,9 @@ public class Auth {
             joinColumns = @JoinColumn(name = "auth_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     public List<Role> roles = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    public User user;
 
 }

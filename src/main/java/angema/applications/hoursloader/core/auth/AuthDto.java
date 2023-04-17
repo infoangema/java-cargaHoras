@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +22,8 @@ public class AuthDto {
     public String userName;
 
     public boolean active = true;
+
+    public Long userId;
 
     public List<RoleDto> roles = new ArrayList<>();
 

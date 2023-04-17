@@ -3,7 +3,6 @@ package angema.applications.hoursloader.app.user;
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
-import angema.applications.hoursloader.core.auth.Auth;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +39,4 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "projects_id"))
     public List<Project> projects = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "auth_id")
-    public Auth auth;
 }

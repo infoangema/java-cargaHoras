@@ -18,8 +18,8 @@ public class AuthResponse {
     public String refreshToken;
     @JsonProperty("issued_at")
     public String issuedAt;
-    @JsonProperty("auth_id")
-    public Long authId;
+    @JsonProperty("user_id")
+    public Long userId;
     @JsonProperty("auth_data")
     public AuthDto authDto;
 
