@@ -1,14 +1,14 @@
-package angema.applications.hoursloader.core.auth;
+package angema.applications.hoursloader.app.record;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class AuthException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class RecordException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public AuthException(String message) {
+    public RecordException(String message) {
         super(message);
     }
 
