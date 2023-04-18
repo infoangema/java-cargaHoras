@@ -2,8 +2,10 @@ package angema.applications.hoursloader.app.record;
 
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.app.project.ProjectDto;
+import angema.applications.hoursloader.app.project.ProjectService;
 import angema.applications.hoursloader.app.user.User;
 import angema.applications.hoursloader.app.user.UserDto;
+import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,26 @@ public class RecordService {
     @Autowired
     private RecordRepository recordRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProjectService projectService;
+
     public List<RecordDto> getAllRecord() {
         try {
             List<Record> records = recordRepository.findAllByOrderByIdAsc();
+            List<RecordDto> recordDtos = new ArrayList<>();
+            records.forEach(record -> recordDtos.add(mapRecordToDto(record)));
+            return recordDtos;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
+    public List<RecordDto> getAllRecordsByUserId(Long idUser) {
+        try {
+            List<Record> records = recordRepository.findByUserIdOrderByIdDesc(idUser);
             List<RecordDto> recordDtos = new ArrayList<>();
             records.forEach(record -> recordDtos.add(mapRecordToDto(record)));
             return recordDtos;
@@ -95,5 +114,26 @@ public class RecordService {
         recordDto.project = project;
 
         return recordDto;
+    }
+
+    public List<RecordDto> getRecordDtoByUserId(Long id) {
+        try {
+            List<Record> recordList = recordRepository.findByUserId(id);
+            List<RecordDto> recordDtolist = new ArrayList<>();
+            recordList.forEach( record -> {
+                RecordDto recordDto = new RecordDto();
+                recordDto.id = record.id;
+                recordDto.date = record.date;
+                recordDto.hours = record.hours;
+                recordDto.description = record.description;
+                recordDto.user = userService.mapUserToDto(record.user);
+                recordDto.project = projectService.mapProjectToDto(record.project);
+
+                recordDtolist.add(recordDto);
+            });
+            return recordDtolist;
+        } catch (Exception e) {
+            throw new RecordException("Error al intentar obtener los registros del user: ");
+        }
     }
 }

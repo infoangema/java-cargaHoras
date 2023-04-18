@@ -33,6 +33,14 @@ public class RecordController {
         RecordDto recordDto = recordService.saveRecord(data);
         return globalResponseService.responseOK(recordDto);
     }
+    @PostMapping("/create/by-user-id/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponse createByUserId(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+        exceptionService.collectErrorsBindings(bindingResult);
+        RecordDto recordDto = recordService.saveRecord(data);
+        List<RecordDto> lista = recordService.getAllRecordsByUserId(id);
+        return globalResponseService.responseOK(lista);
+    }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -42,7 +50,7 @@ public class RecordController {
     }
 
     @GetMapping("/read/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
     public GlobalResponse readById(@PathVariable("id") Long id) {
         RecordDto recordDto = recordService.getRecordDtoById(id);
         return globalResponseService.responseOK(recordDto);
@@ -68,5 +76,12 @@ public class RecordController {
         data.id = recordDto.id;
         data = recordService.saveRecord(data);
         return globalResponseService.responseOK(data);
+    }
+
+    @GetMapping("/read/by-user-id/{id}")
+    @PreAuthorize("hasRole('ROLE_DEVS')")
+    public GlobalResponse readByUserId(@PathVariable("id") Long id) {
+        List<RecordDto> recordDto = recordService.getRecordDtoByUserId(id);
+        return globalResponseService.responseOK(recordDto);
     }
 }

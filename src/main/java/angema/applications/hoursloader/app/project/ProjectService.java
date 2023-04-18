@@ -66,7 +66,7 @@ public class ProjectService {
         }
     }
 
-    private Project mapDtoToProject(ProjectDto projectDto) {
+    public Project mapDtoToProject(ProjectDto projectDto) {
         Project project = new Project();
 
         project.id = projectDto.id;
@@ -77,7 +77,7 @@ public class ProjectService {
         project.status = projectDto.status;
         return project;
     }
-    private ProjectDto mapProjectToDto(Project project) {
+    public ProjectDto mapProjectToDto(Project project) {
         ProjectDto projectDto = new ProjectDto();
 
         projectDto.id = project.id;
