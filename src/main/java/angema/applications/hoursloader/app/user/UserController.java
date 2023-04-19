@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/read/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
     public GlobalResponse getId(@PathVariable("id") Long id) {
         UserDto user = userService.getUserDtoById(id);
         return globalResponseService.responseOK(user);

@@ -136,4 +136,16 @@ public class RecordService {
             throw new RecordException("Error al intentar obtener los registros del user: ");
         }
     }
+
+    public RecordDto getRecordDtoByUserIdAndRecorId(Long userId, Long recorId) {
+        Record record = recordRepository.findByIdAndUserId(recorId, userId);
+        RecordDto recordDto = new RecordDto();
+        recordDto.id = record.id;
+        recordDto.date = record.date;
+        recordDto.hours = record.hours;
+        recordDto.description = record.description;
+        recordDto.user = userService.mapUserToDto(record.user);
+        recordDto.project = projectService.mapProjectToDto(record.project);
+        return recordDto;
+    }
 }
