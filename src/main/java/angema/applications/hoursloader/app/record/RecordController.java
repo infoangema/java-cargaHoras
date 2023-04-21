@@ -3,14 +3,18 @@ package angema.applications.hoursloader.app.record;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
-import com.sun.xml.bind.v2.TODO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +31,9 @@ public class RecordController {
 
     @Autowired
     private ExceptionService exceptionService;
+
+    @Autowired
+    JavaMailSender emailSender;
 
     @Autowired
     private GlobalResponseService globalResponseService;
@@ -98,6 +105,25 @@ public class RecordController {
         RecordDto recordDto = recordService.getRecordDtoByUserIdAndRecorId(userId, recorId);
         recordService.deleteRecord(recordDto);
         return globalResponseService.responseOK(recordDto);
+    }
+
+
+
+    @GetMapping("/send-email")
+    public void sendEmailWithAttachment() throws MessagingException, MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo("paletgerardo@gmail.com");
+        helper.setSubject("info@angema.com.ar");
+        helper.setText("hola desde mail.");
+
+        // Agregar un archivo adjunto al correo electrónico
+//        FileSystemResource file = new FileSystemResource(new File("ruta/al/archivo.pdf"));
+        ClassPathResource file = new ClassPathResource("static/archivo.pdf");
+
+        helper.addAttachment("Archivo.pdf", file);
+
+        emailSender.send(message);
     }
 
 }

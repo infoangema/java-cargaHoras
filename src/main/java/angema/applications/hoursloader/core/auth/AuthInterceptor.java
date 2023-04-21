@@ -23,29 +23,34 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
     private AuthJwt authJwt;
+    @Value("${configs.auth.security.enabled}")
+    private boolean securityEnabled;
+
 
     @Override
     public boolean preHandle(javax.servlet.http.HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         boolean validate = false;
-        String uri = request.getRequestURI();
-        String authToken = request.getHeader("Authorization");
+        if (securityEnabled) {
+            String uri = request.getRequestURI();
+            String authToken = request.getHeader("Authorization");
 
-        if (uri.equals(AUTH_PATH) || excluded(uri)) {
-            return true;
-        }
+            if (uri.equals(AUTH_PATH) || excluded(uri)) {
+                return true;
+            }
 
-        if (authToken == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-        }
+            if (authToken == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
 
-        if (!authToken.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-        }
+            if (!authToken.startsWith("Bearer ")) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
 
-        String token = authToken.replace("Bearer ", "");
-        validate = authJwt.validateToken(token);
-        if (!validate) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            String token = authToken.replace("Bearer ", "");
+            validate = authJwt.validateToken(token);
+            if (!validate) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         }
         return validate;
 
