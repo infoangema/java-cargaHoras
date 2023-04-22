@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html"></meta>
+    <style th:utext="informe.css"></style>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th colspan="4" th:text="${recordList[0].project.description + ' - ' + recordList[0].user.name}"></th>
+    </tr>
+    <tr>
+        <th>FECHA</th>
+        <th>CANT. HS</th>
+        <th>PROYECTO</th>
+        <th>DESCRIPCION</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="record : ${recordList}">
+        <td th:text="${record.date}"></td>
+        <td th:text="${record.hours}"></td>
+        <td th:text="${record.project.name}"></td>
+        <td th:text="${record.description}"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <!--        <td th:text="${#numbers.formatDecimal(#lists.sum(recordList.![hours]))}"></td>-->
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+
+    <tfoot>
+    <tr>
+        <!--        <td colspan="4" th:text="'Total de horas trabajadas: ' + ${#numbers.formatDecimal(#lists.sum(recordList.![hours]))}"></td>-->
+        <!--        <td colspan="4" th:text="'Total de horas trabajadas: ' + ${#numbers.formatDecimal(#lists.sum(recordList.![hours]))}"></td>-->
+    </tr>
+    </tfoot>
+
+</table>
+
+</body>
+</html>

@@ -84,7 +84,7 @@ public class RecordService {
 
         record.id = recordDto.id;
         record.date = recordDto.date;
-        record.hours = recordDto.hours;
+        record.hours = String.valueOf(recordDto.hours);
         record.description = recordDto.description;
 
         User user = new User();
@@ -102,7 +102,7 @@ public class RecordService {
 
         recordDto.id = record.id;
         recordDto.date = record.date;
-        recordDto.hours = record.hours;
+        recordDto.hours = Integer.valueOf(record.hours);
         recordDto.description = record.description;
 
         UserDto user = new UserDto();
@@ -124,7 +124,7 @@ public class RecordService {
                 RecordDto recordDto = new RecordDto();
                 recordDto.id = record.id;
                 recordDto.date = record.date;
-                recordDto.hours = record.hours;
+                recordDto.hours = Integer.valueOf(record.hours);
                 recordDto.description = record.description;
                 recordDto.user = userService.mapUserToDto(record.user);
                 recordDto.project = projectService.mapProjectToDto(record.project);
@@ -142,7 +142,7 @@ public class RecordService {
         RecordDto recordDto = new RecordDto();
         recordDto.id = record.id;
         recordDto.date = record.date;
-        recordDto.hours = record.hours;
+        recordDto.hours = Integer.valueOf(record.hours);
         recordDto.description = record.description;
         recordDto.user = userService.mapUserToDto(record.user);
         recordDto.project = projectService.mapProjectToDto(record.project);

@@ -1,0 +1,32 @@
+/* Estilos para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+th, td {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+thead tr:first-child {
+    background-color: blue;
+    color: white;
+    font-weight: bold;
+}
+
+thead tr:not(:first-child) {
+    background-color: #F2F2F2;
+}
+
+tfoot tr {
+    background-color: blue;
+    color: white;
+}
+
+tfoot td {
+    font-weight: bold;
+}
+
