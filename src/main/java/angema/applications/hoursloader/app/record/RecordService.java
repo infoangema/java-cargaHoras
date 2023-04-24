@@ -7,6 +7,7 @@ import angema.applications.hoursloader.app.user.User;
 import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
+import angema.applications.hoursloader.core.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,9 @@ public class RecordService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private DateUtil dateUtil;
 
     public List<RecordDto> getAllRecord() {
         try {
@@ -79,7 +84,8 @@ public class RecordService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND, e);
         }
     }
-    private static Record mapDtoToRecord(RecordDto recordDto) {
+
+    public Record mapDtoToRecord(RecordDto recordDto) {
         Record record = new Record();
 
         record.id = recordDto.id;
@@ -97,7 +103,8 @@ public class RecordService {
 
         return record;
     }
-    private static RecordDto mapRecordToDto(Record record) {
+
+    public RecordDto mapRecordToDto(Record record) {
         RecordDto recordDto = new RecordDto();
 
         recordDto.id = record.id;
@@ -120,7 +127,7 @@ public class RecordService {
         try {
             List<Record> recordList = recordRepository.findByUserId(id);
             List<RecordDto> recordDtolist = new ArrayList<>();
-            recordList.forEach( record -> {
+            recordList.forEach(record -> {
                 RecordDto recordDto = new RecordDto();
                 recordDto.id = record.id;
                 recordDto.date = record.date;
@@ -148,4 +155,35 @@ public class RecordService {
         recordDto.project = projectService.mapProjectToDto(record.project);
         return recordDto;
     }
+
+    public String getTotalHours(List<RecordDto> recordList) {
+        int totalHours = 0;
+        for (RecordDto recordDto : recordList) {
+            totalHours += recordDto.hours;
+        }
+        return String.valueOf(totalHours);
+    }
+
+    public List<Date> getMissingDays(Long userId) {
+        return recordRepository.findMissingDatesByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+    }
+
+    public List<RecordDto> findRecordsDtoByCurrentMonth(Long userId) {
+        try {
+            List<Record> records = recordRepository.findRecordsByUserIdAndCurrentMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+            List<RecordDto> recordDtos = new ArrayList<>();
+            records.forEach(record -> {
+                record.date = dateUtil.getDayMonthString(record.date);
+                recordDtos.add(mapRecordToDto(record));
+            });
+            return recordDtos;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
+    public Integer getCountRecordsByUserId(Long userId) {
+        return recordRepository.countRecordsByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+    }
 }
+

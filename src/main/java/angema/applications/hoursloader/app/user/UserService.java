@@ -37,13 +37,8 @@ public class UserService {
     }
 
     public UserDto getUserDtoById(final Long id) {
-
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return mapUserToDto(user.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, Messages.ERROR_PROJECT_NOT_FOUND);
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException("Usuario no encontrado: " + id));
+        return mapUserToDto(user);
     }
 
     public UserDto saveUser(UserDto userDto) {
@@ -57,7 +52,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
         }
     }
-
 
 
     public void deleteUser(UserDto userDto) {
@@ -86,6 +80,7 @@ public class UserService {
         });
         return user;
     }
+
     public UserDto mapUserToDto(User user) {
         UserDto userDto = new UserDto();
 
@@ -101,7 +96,7 @@ public class UserService {
             projectDto.name = project.name;
             projectDto.id = project.id;
             projectDto.description = project.description;
-            projectDto.company = companyService.mapCompanyToDto(project.company) ;
+            projectDto.company = companyService.mapCompanyToDto(project.company);
             userDto.projects.add(projectDto);
         });
 

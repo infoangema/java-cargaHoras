@@ -1,11 +1,15 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.pdf.PdfService;
+import angema.applications.hoursloader.app.user.UserDto;
+import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -25,11 +29,19 @@ public class RecordController {
     @Autowired
     private RecordService recordService;
 
+
+    @Autowired
+    private UserService userService;
+
     @Autowired
     private ExceptionService exceptionService;
 
     @Autowired
     JavaMailSender emailSender;
+
+
+    @Autowired
+    private PdfService pdfService;
 
     @Autowired
     private GlobalResponseService globalResponseService;
@@ -53,19 +65,38 @@ public class RecordController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public GlobalResponse read() {
         List<RecordDto> recordDtos = recordService.getAllRecord();
-//        todo: obtener dias no cargados.
-        Integer count = recordRepository.countRecordsByUserIdAndMonth(4L);
-        List<Date> dateList = recordRepository.findMissingDatesByUserIdAndMonth(4L);
         return globalResponseService.responseOK(recordDtos);
     }
 
-    @GetMapping("/read/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse readById(@PathVariable("id") Long id) {
-        RecordDto recordDto = recordService.getRecordDtoById(id);
-        return globalResponseService.responseOK(recordDto);
+    @GetMapping("/read/{userId}/find-missing-days-for-current-user")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
+    public GlobalResponse read(@PathVariable("userId") Long userId) {
+//        Integer count = recordService.getCountRecordsByUserId(userId);
+        List<Date> dateList = recordService.getMissingDays(userId);
+        return globalResponseService.responseOK(dateList);
     }
 
+    @GetMapping("/read/{userId}/find-records-for-current-user")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
+    public GlobalResponse readCurrentRecordsByUserId(@PathVariable("userId") Long userId) {
+        List<RecordDto> recordList = recordService.findRecordsDtoByCurrentMonth(userId);
+        return globalResponseService.responseOK(recordList);
+    }
+
+
+    @GetMapping("/read/{userId}/record-by-user-id")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponse readByUserId(@PathVariable("userId") Long userId) {
+        RecordDto recordDto = recordService.getRecordDtoById(userId);
+        return globalResponseService.responseOK(recordDto);
+    }
+    @GetMapping("/read/{userId}/record-list-by-user-id")
+    @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
+    public GlobalResponse readListByUserId(@PathVariable("userId") Long userId) {
+//        Integer count = getCountRecordsByUserId(userId);
+        List<RecordDto> recordDto = recordService.getRecordDtoByUserId(userId);
+        return globalResponseService.responseOK(recordDto);
+    }
 
 
     @DeleteMapping("/delete/{id}")
@@ -88,12 +119,6 @@ public class RecordController {
         return globalResponseService.responseOK(data);
     }
 
-    @GetMapping("/read/by-user-id/{id}")
-    @PreAuthorize("hasRole('ROLE_DEVS')")
-    public GlobalResponse readByUserId(@PathVariable("id") Long id) {
-        List<RecordDto> recordDto = recordService.getRecordDtoByUserId(id);
-        return globalResponseService.responseOK(recordDto);
-    }
 
     @DeleteMapping("/delete/by-user-id/{userId}/record-id/{recorId}")
     @PreAuthorize("hasRole('ROLE_DEVS')")
@@ -101,6 +126,29 @@ public class RecordController {
         RecordDto recordDto = recordService.getRecordDtoByUserIdAndRecorId(userId, recorId);
         recordService.deleteRecord(recordDto);
         return globalResponseService.responseOK(recordDto);
+    }
+    @GetMapping(value = "/download-pdf-by-user-id/{userId}", produces = "application/pdf")
+    @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
+    public ResponseEntity<byte[]> downloadPdf(@PathVariable long userId) {
+        UserDto user = userService.getUserDtoById(userId);
+        List<RecordDto> recordDtoList = recordService.findRecordsDtoByCurrentMonth(userId);
+        byte[] pdf = pdfService.createInforme(user, recordDtoList);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("informe.pdf").build());
+        headers.setContentLength(pdf.length);
+
+        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/send-email-by-user-id/{userId}")
+    @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
+    public GlobalResponse sendEmail(@PathVariable long userId) {
+        UserDto user = userService.getUserDtoById(userId);
+        List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
+        String res = pdfService.sendEmailByUser(user, recordDtoList);
+        return globalResponseService.responseOK(res);
     }
 
 }
