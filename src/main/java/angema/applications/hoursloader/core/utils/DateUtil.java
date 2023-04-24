@@ -3,9 +3,11 @@ package angema.applications.hoursloader.core.utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 @Component
@@ -22,6 +24,30 @@ public class DateUtil {
 
     public String getDateString() {
         return simpleDateFormat().format(new Date());
+    }
+
+    public String getMonthYearNameString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", new Locale("es", "ES"));
+        sdf.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+        return sdf.format(new Date());
+    }
+
+    public String getDayMonthString() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+        return dateFormat.format(new Date());
+    }
+
+    public String getDayMonthString(String dateString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+            Date date = dateFormat.parse(dateString);
+            dateFormat.applyPattern("dd-MM");
+            return dateFormat.format(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public long getDateMillis() {

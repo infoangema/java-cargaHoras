@@ -1,6 +1,8 @@
 package angema.applications.hoursloader.core.exceptions;
 
+import angema.applications.hoursloader.app.pdf.PdfException;
 import angema.applications.hoursloader.app.record.RecordException;
+import angema.applications.hoursloader.app.user.UserException;
 import angema.applications.hoursloader.core.auth.AuthException;
 import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
 import angema.applications.hoursloader.core.utils.DateUtil;
@@ -24,6 +26,37 @@ public class GlobalExceptionHandler {
         GlobalResponse response = new GlobalResponse();
 
         response.status = HttpStatus.UNAUTHORIZED;
+        response.path = request.getDescription(false);
+        response.timestamp = dateUtil.getDateString();
+        response.body = null;
+        response.error = ex.getMessage();
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+
+        //GlobalResponse response = globalResponseService.badRequestResponse(ex.getMessage(), request );
+
+    }
+
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<?> userException(UserException ex, WebRequest request) {
+        GlobalResponse response = new GlobalResponse();
+
+        response.status = HttpStatus.BAD_REQUEST;
+        response.path = request.getDescription(false);
+        response.timestamp = dateUtil.getDateString();
+        response.body = null;
+        response.error = ex.getMessage();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        //GlobalResponse response = globalResponseService.badRequestResponse(ex.getMessage(), request );
+
+    }
+
+
+    @ExceptionHandler(PdfException.class)
+    public ResponseEntity<?> userException(PdfException ex, WebRequest request) {
+        GlobalResponse response = new GlobalResponse();
+
+        response.status = HttpStatus.BAD_REQUEST;
         response.path = request.getDescription(false);
         response.timestamp = dateUtil.getDateString();
         response.body = null;
