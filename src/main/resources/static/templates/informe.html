@@ -4,35 +4,36 @@
     <meta http-equiv="Content-Type" content="text/html"></meta>
 </head>
 <body>
+<h1>
+    Infórme de horas trabajadas
+</h1>
 <table style="border-collapse: collapse; width: 100%; font-family: Arial, Helvetica, sans-serif;">
     <thead>
-    <tr style="background-color: blue; color: white; font-weight: bold; text-align: center;">
-        <th colspan="4" style="padding: 10px;">
-                <span th:text="${recordList[0].project.description + ' - ' + recordList[0].user.name}"
-                      style="font-size: 18px;"></span>
+    <tr style="background-color: #8b44ba; color: white; font-weight: bold; text-align: center;">
+        <th colspan="5" style="padding: 5px;">
+            <span th:text="${informe.description + ' - ' + informe.user.name}" style="font-size: 14px;"></span>
         </th>
     </tr>
-    <tr style="background-color: blue; color: white; text-align: center;">
-        <th style="padding: 10px; border: 1px solid black;">FECHA</th>
-        <th style="padding: 10px; border: 1px solid black;">CANT. HS</th>
-        <th style="padding: 10px; border: 1px solid black;">PROYECTO</th>
-        <th style="padding: 10px; border: 1px solid black;">DESCRIPCION</th>
+    <tr style="background-color: #8b44ba; color: white; font-weight: bold; text-align: center;">
+        <th colspan="5" style="padding: 5px;">
+            <span th:text=" ${informe.date}" style="font-size: 14px;"></span>
+        </th>
+    </tr>
+    <tr style="text-align: center;">
+        <th colspan="1" style="padding: 5px; border: 1px solid black; max-width: 50px">FECHA</th>
+        <th colspan="1" style="padding: 5px; border: 1px solid black;">HS</th>
+        <th colspan="3" style="padding: 5px; border: 1px solid black;">DESCRIPCION</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="record : ${recordList}"
-        style="text-align: center;">
-        <td style="padding: 10px; border: 1px solid black;" th:text="${record.date}"></td>
-        <td style="padding: 10px; border: 1px solid black;" th:text="${record.hours}"></td>
-        <td style="padding: 10px; border: 1px solid black;" th:text="${record.project.name}"></td>
-        <td style="padding: 10px; border: 1px solid black;" th:text="${record.description}"></td>
+    <tr th:each="record : ${informe.records}" style="text-align: center;">
+        <td colspan="1" style="padding: 5px; border: 1px solid black; font-size: 12px; max-width: 50px" th:text="${record.date}"></td>
+        <td colspan="1" style="padding: 5px; border: 1px solid black; font-size: 12px;" th:text="${record.hours}"></td>
+        <td colspan="3" style="padding: 5px; border: 1px solid black; font-size: 12px;" th:text="${record.description}"></td>
     </tr>
-    <tr style="background-color: blue; color: white; font-weight: bold; text-align: center;">
-        <td style="padding: 10px; border: 1px solid black;"></td>
-        <td style="padding: 10px; border: 1px solid black;"></td>
-        <td style="padding: 10px; border: 1px solid black;"></td>
-        <td style="padding: 10px; border: 1px solid black;">
-<!--                <span th:text="'Horas trabajadas: ' + #numbers.formatDecimal(#lists.sum(recordList.![hours]))" style="font-size: 18px;"></span>-->
+    <tr style="background-color: #8b44ba; color: white; font-weight: bold; text-align: center;">
+        <td colspan="5"  style="padding: 5px; border: 1px solid black;">
+            <span th:text="'Horas trabajadas: ' + ${informe.hours}" style="font-size: 14px;"></span>
         </td>
     </tr>
     </tbody>
