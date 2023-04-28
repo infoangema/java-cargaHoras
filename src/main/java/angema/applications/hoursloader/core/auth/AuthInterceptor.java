@@ -60,7 +60,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private boolean excluded(String uri) {
         boolean result = false;
         for (String exc : EXCLUDED_PATHS) {
-            if (exc.equals(uri)) {
+            if (exc.contains(uri)) {
                 result = true;
             }
         }

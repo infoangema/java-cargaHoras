@@ -10,7 +10,7 @@
     </parent>
     <groupId>angema.applications.hoursloader</groupId>
     <artifactId>hours</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>version-0.0.1-port-8090</version>
     <name>hours-loader</name>
     <description>Angema app to hour load.</description>
     <properties>

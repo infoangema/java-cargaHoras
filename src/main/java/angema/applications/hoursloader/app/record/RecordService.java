@@ -112,13 +112,8 @@ public class RecordService {
         recordDto.hours = Integer.valueOf(record.hours);
         recordDto.description = record.description;
 
-        UserDto user = new UserDto();
-        user.id = record.user.id;
-        recordDto.user = user;
-
-        ProjectDto project = new ProjectDto();
-        project.id = record.project.id;
-        recordDto.project = project;
+        recordDto.user = userService.mapUserToDto(record.user);
+        recordDto.project = projectService.mapProjectToDto(record.project);
 
         return recordDto;
     }
