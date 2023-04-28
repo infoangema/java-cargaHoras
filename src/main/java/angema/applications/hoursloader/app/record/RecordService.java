@@ -1,10 +1,8 @@
 package angema.applications.hoursloader.app.record;
 
 import angema.applications.hoursloader.app.project.Project;
-import angema.applications.hoursloader.app.project.ProjectDto;
 import angema.applications.hoursloader.app.project.ProjectService;
 import angema.applications.hoursloader.app.user.User;
-import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
 import angema.applications.hoursloader.core.utils.DateUtil;
@@ -179,6 +177,13 @@ public class RecordService {
 
     public Integer getCountRecordsByUserId(Long userId) {
         return recordRepository.countRecordsByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+    }
+
+    public void isValidRecord(RecordDto data, Long id) {
+        List<Record> record = recordRepository.findByDateAndUserId(data.date, id);
+        if (record.size() > 0) {
+            throw new RecordException("Ya existe un registro para la fecha: " + data.date);
+        }
     }
 }
 

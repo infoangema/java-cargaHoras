@@ -47,7 +47,8 @@ public class RecordController {
     @PostMapping("/create/by-user-id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
     public List<RecordDto> createByUserId(@RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        RecordDto recordDto = recordService.saveRecord(data);
+        recordService.isValidRecord(data, id);
+        recordService.saveRecord(data);
         List<RecordDto> lista = recordService.getAllRecordsByUserId(id);
         return lista;
     }

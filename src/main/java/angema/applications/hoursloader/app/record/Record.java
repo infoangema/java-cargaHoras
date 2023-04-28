@@ -18,7 +18,9 @@ import java.io.Serializable;
 public class Record implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGA_HORAS_SEQUENCE")
+@SequenceGenerator(name = "CARGA_HORAS_SEQUENCE", sequenceName = "CARGA_HORAS_SEQUENCE", allocationSize = 1)
+
     public Long id;
 
     @NotBlank(message = Messages.ERROR_NULL_DATE)

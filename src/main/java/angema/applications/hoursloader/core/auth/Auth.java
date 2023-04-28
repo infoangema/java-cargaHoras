@@ -13,7 +13,9 @@ import java.util.List;
 @Entity
 public class Auth {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGA_HORAS_SEQUENCE")
+@SequenceGenerator(name = "CARGA_HORAS_SEQUENCE", sequenceName = "CARGA_HORAS_SEQUENCE", allocationSize = 1)
+
     public Long id;
 
     public String userName;
