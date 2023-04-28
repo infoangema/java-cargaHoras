@@ -40,13 +40,20 @@ public class RecordController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public RecordDto create(@RequestBody RecordDto data, BindingResult bindingResult) {
+    public RecordDto create(@RequestBody RecordDto data) {
         RecordDto recordDto = recordService.saveRecord(data);
+        return recordDto;
+    }
+
+    @PostMapping("/create/by-list")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
+    public List<String> createAll(@RequestBody List<RecordDto> data) {
+        List<String> recordDto = recordService.saveAllRecord(data);
         return recordDto;
     }
     @PostMapping("/create/by-user-id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
-    public List<RecordDto> createByUserId(@RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public List<RecordDto> createByUserId(@RequestBody RecordDto data, @PathVariable("id") Long id) {
         recordService.isValidRecord(data, id);
         recordService.saveRecord(data);
         List<RecordDto> lista = recordService.getAllRecordsByUserId(id);
@@ -100,7 +107,7 @@ public class RecordController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public RecordDto update(@RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public RecordDto update(@RequestBody RecordDto data, @PathVariable("id") Long id) {
         RecordDto recordDto = recordService.getRecordDtoById(id);
         data.id = recordDto.id;
         data = recordService.saveRecord(data);

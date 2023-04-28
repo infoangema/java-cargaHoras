@@ -75,6 +75,26 @@ public class RecordService {
         }
     }
 
+    public List<String> saveAllRecord(List<RecordDto> recorList) {
+        try {
+            List<String> list = new ArrayList<>();
+            recorList.forEach(recordDto -> {
+                Record record = mapDtoToRecord(recordDto);
+                try {
+                    isValidRecord(recordDto, record.user.id);
+                    recordRepository.save(record);
+                    list.add("fecha: " + record.date + " guardada correctamente");
+                } catch (Exception e) {
+                    list.add(e.getMessage());
+                }
+            });
+//            return findRecordsDtoByCurrentMonth(recorList.get(0).user.id);
+            return list;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
     public void deleteRecord(RecordDto recordDto) {
         try {
             recordRepository.delete(mapDtoToRecord(recordDto));
@@ -185,5 +205,7 @@ public class RecordService {
             throw new RecordException("Ya existe un registro para la fecha: " + data.date);
         }
     }
+
+
 }
 
