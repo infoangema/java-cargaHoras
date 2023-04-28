@@ -1,4 +1,4 @@
-package angema.applications.hoursloader.core.exceptions;
+package angema.applications.hoursloader.core.globalResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

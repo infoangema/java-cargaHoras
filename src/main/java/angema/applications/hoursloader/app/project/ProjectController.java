@@ -21,51 +21,41 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @Autowired
-    private ExceptionService exceptionService;
-
-    @Autowired
-    private GlobalResponseService globalResponseService;
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse create(@Valid @RequestBody ProjectDto data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
+    public ProjectDto create(@RequestBody ProjectDto data, BindingResult bindingResult) {
         ProjectDto projectDto = projectService.saveProject(data);
-        return globalResponseService.responseOK(projectDto);
+        return projectDto;
     }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse read() {
+    public List<ProjectDto> read() {
         List<ProjectDto> projectDto = projectService.getAllProject();
-        return globalResponseService.responseOK(projectDto);
+        return projectDto;
     }
 
     @GetMapping("/read/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse readById(@PathVariable("id") Long id) {
+    public ProjectDto readById(@PathVariable("id") Long id) {
         ProjectDto projectDto = projectService.getProjectDtoById(id);
-        return globalResponseService.responseOK(projectDto);
+        return projectDto;
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id) {
         ProjectDto projectDto = projectService.getProjectDtoById(id);
         projectService.deleteProject(projectDto);
-        return globalResponseService.responseOK(projectDto);
+        return "DELETE";
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@Valid @RequestBody ProjectDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-
-        exceptionService.collectErrorsBindings(bindingResult);
+    public ProjectDto update(@RequestBody ProjectDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         ProjectDto projectDto = projectService.getProjectDtoById(id);
-        // todo: response error
         data.id = projectDto.id;
         data = projectService.saveProject(data);
-        return globalResponseService.responseOK(data);
+        return data;
     }
 }

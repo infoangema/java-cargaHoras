@@ -23,55 +23,42 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthValidator authValidator;
-
-    @Autowired
-    private ExceptionService exceptionService;
-
-    @Autowired
-    private GlobalResponseService globalResponseService;
-
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse create(@Valid @RequestBody UserDto data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
+    public UserDto create(@RequestBody UserDto data, BindingResult bindingResult) {
         UserDto userDto = userService.saveUser(data);
-        return globalResponseService.responseOK(userDto);
+        return userDto;
     }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse read() {
+    public List<UserDto> read() {
         List<UserDto> users = userService.getAllUser();
-        return globalResponseService.responseOK(users);
+        return users;
     }
 
     @GetMapping("/read/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
-    public GlobalResponse getId(@PathVariable("id") Long id) {
+    public UserDto getId(@PathVariable("id") Long id) {
         UserDto user = userService.getUserDtoById(id);
-        return globalResponseService.responseOK(user);
+        return user;
     }
 
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id) {
         UserDto user = userService.getUserDtoById(id);
         userService.deleteUser(user);
-        return globalResponseService.responseOK("USER DELETE");
+        return "DELETE";
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@Valid @RequestBody UserDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
+    public UserDto update(@RequestBody UserDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         UserDto userDto = userService.getUserDtoById(id);
-        // todo: response error
         data.id = userDto.id;
         data = userService.saveUser(data);
-        return globalResponseService.responseOK(data);
+        return data;
     }
 }

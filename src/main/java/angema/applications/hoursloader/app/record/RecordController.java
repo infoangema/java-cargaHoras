@@ -23,8 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/records")
 public class RecordController {
-    @Autowired
-    private RecordRepository recordRepository;
 
     @Autowired
     private RecordService recordService;
@@ -33,99 +31,88 @@ public class RecordController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ExceptionService exceptionService;
 
     @Autowired
     JavaMailSender emailSender;
 
-
     @Autowired
     private PdfService pdfService;
 
-    @Autowired
-    private GlobalResponseService globalResponseService;
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse create(@Valid @RequestBody RecordDto data, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
+    public RecordDto create(@RequestBody RecordDto data, BindingResult bindingResult) {
         RecordDto recordDto = recordService.saveRecord(data);
-        return globalResponseService.responseOK(recordDto);
+        return recordDto;
     }
     @PostMapping("/create/by-user-id/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
-    public GlobalResponse createByUserId(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-        exceptionService.collectErrorsBindings(bindingResult);
+    public List<RecordDto> createByUserId(@RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         RecordDto recordDto = recordService.saveRecord(data);
         List<RecordDto> lista = recordService.getAllRecordsByUserId(id);
-        return globalResponseService.responseOK(lista);
+        return lista;
     }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse read() {
+    public List<RecordDto> read() {
         List<RecordDto> recordDtos = recordService.getAllRecord();
-        return globalResponseService.responseOK(recordDtos);
+        return recordDtos;
     }
 
     @GetMapping("/read/{userId}/find-missing-days-for-current-user")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
-    public GlobalResponse read(@PathVariable("userId") Long userId) {
+    public List<Date> read(@PathVariable("userId") Long userId) {
 //        Integer count = recordService.getCountRecordsByUserId(userId);
         List<Date> dateList = recordService.getMissingDays(userId);
-        return globalResponseService.responseOK(dateList);
+        return dateList;
     }
 
     @GetMapping("/read/{userId}/find-records-for-current-user")
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DEVS')")
-    public GlobalResponse readCurrentRecordsByUserId(@PathVariable("userId") Long userId) {
+    public List<RecordDto> readCurrentRecordsByUserId(@PathVariable("userId") Long userId) {
         List<RecordDto> recordList = recordService.findRecordsDtoByCurrentMonth(userId);
-        return globalResponseService.responseOK(recordList);
+        return recordList;
     }
 
 
     @GetMapping("/read/{userId}/record-by-user-id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse readByUserId(@PathVariable("userId") Long userId) {
+    public RecordDto readByUserId(@PathVariable("userId") Long userId) {
         RecordDto recordDto = recordService.getRecordDtoById(userId);
-        return globalResponseService.responseOK(recordDto);
+        return recordDto;
     }
     @GetMapping("/read/{userId}/record-list-by-user-id")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
-    public GlobalResponse readListByUserId(@PathVariable("userId") Long userId) {
-//        Integer count = getCountRecordsByUserId(userId);
+    public List<RecordDto> readListByUserId(@PathVariable("userId") Long userId) {
         List<RecordDto> recordDto = recordService.getRecordDtoByUserId(userId);
-        return globalResponseService.responseOK(recordDto);
+        return recordDto;
     }
 
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id) {
         RecordDto recordDto = recordService.getRecordDtoById(id);
         recordService.deleteRecord(recordDto);
-        return globalResponseService.responseOK(recordDto);
+        return "DELETE";
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@Valid @RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-
-        exceptionService.collectErrorsBindings(bindingResult);
+    public RecordDto update(@RequestBody RecordDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         RecordDto recordDto = recordService.getRecordDtoById(id);
-        // todo: response error
         data.id = recordDto.id;
         data = recordService.saveRecord(data);
-        return globalResponseService.responseOK(data);
+        return data;
     }
 
 
     @DeleteMapping("/delete/by-user-id/{userId}/record-id/{recorId}")
     @PreAuthorize("hasRole('ROLE_DEVS')")
-    public GlobalResponse deleteByUserId(@PathVariable("userId") Long userId, @PathVariable("recorId") Long recorId) {
+    public String deleteByUserId(@PathVariable("userId") Long userId, @PathVariable("recorId") Long recorId) {
         RecordDto recordDto = recordService.getRecordDtoByUserIdAndRecorId(userId, recorId);
         recordService.deleteRecord(recordDto);
-        return globalResponseService.responseOK(recordDto);
+        return "DELETE";
     }
     @GetMapping(value = "/download-pdf-by-user-id/{userId}", produces = "application/pdf")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
@@ -144,11 +131,11 @@ public class RecordController {
 
     @GetMapping("/send-email-by-user-id/{userId}")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
-    public GlobalResponse sendEmail(@PathVariable long userId) {
+    public String sendEmail(@PathVariable long userId) {
         UserDto user = userService.getUserDtoById(userId);
         List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
         String res = pdfService.sendEmailByUser(user, recordDtoList);
-        return globalResponseService.responseOK(res);
+        return res;
     }
 
 }

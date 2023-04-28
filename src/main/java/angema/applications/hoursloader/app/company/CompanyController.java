@@ -22,49 +22,44 @@ public class CompanyController {
     @Autowired
     private ExceptionService exceptionService;
 
-    @Autowired
-    private GlobalResponseService globalResponseService;
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse create(@Valid @RequestBody CompanyDto data, BindingResult bindingResult) {
+    public CompanyDto create(@Valid @RequestBody CompanyDto data, BindingResult bindingResult) {
         exceptionService.collectErrorsBindings(bindingResult);
         CompanyDto companyDto = companyService.saveCompany(data);
-        return globalResponseService.responseOK(companyDto);
+        return companyDto;
     }
 
     @GetMapping("/read")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse read() {
+    public List<CompanyDto> read() {
         List<CompanyDto> companyDto = companyService.getAllCompany();
-        return globalResponseService.responseOK(companyDto);
+        return companyDto;
     }
 
     @GetMapping("/read/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse readById(@PathVariable("id") Long id) {
+    public CompanyDto readById(@PathVariable("id") Long id) {
         CompanyDto companyDto = companyService.getCompanyDtoById(id);
-        return globalResponseService.responseOK(companyDto);
+        return companyDto;
     }
 
 
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse delete(@PathVariable("id") Long id) {
+    public CompanyDto delete(@PathVariable("id") Long id) {
         CompanyDto companyDto = companyService.getCompanyDtoById(id);
         companyService.deleteCompany(companyDto);
-        return globalResponseService.responseOK(companyDto);
+        return companyDto;
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public GlobalResponse update(@Valid @RequestBody CompanyDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
-
-        exceptionService.collectErrorsBindings(bindingResult);
+    public CompanyDto update(@RequestBody CompanyDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
         CompanyDto companyDto = companyService.getCompanyDtoById(id);
-        // todo: response error
         data.id = companyDto.id;
         data = companyService.saveCompany(data);
-        return globalResponseService.responseOK(data);
+        return data;
     }
 }

@@ -3,7 +3,6 @@ package angema.applications.hoursloader.app.record;
 import angema.applications.hoursloader.app.user.User;
 import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
-import angema.applications.hoursloader.core.auth.Auth;
 import angema.applications.hoursloader.app.project.Project;
 import lombok.*;
 
