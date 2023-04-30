@@ -1,8 +1,11 @@
 package angema.applications.hoursloader.app.user;
 
+import angema.applications.hoursloader.app.company.Company;
+import angema.applications.hoursloader.app.company.CompanyRepository;
 import angema.applications.hoursloader.app.company.CompanyService;
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.app.project.ProjectDto;
+import angema.applications.hoursloader.app.project.ProjectRepository;
 import angema.applications.hoursloader.app.user.dtos.RoleDto;
 import angema.applications.hoursloader.core.Messages;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserService {
+
+    @Autowired
+    private ProjectRepository projectRepository;
     @Autowired
     private CompanyService companyService;
 
@@ -89,7 +95,7 @@ public class UserService {
         userDto.lastName = user.lastName;
         userDto.email = user.email;
         userDto.phone = user.phone;
-
+        user.projects = projectRepository.findAllByUserId(user.id);
         user.projects.forEach(project -> {
             ProjectDto projectDto = new ProjectDto();
             projectDto.status = project.status;
@@ -103,5 +109,9 @@ public class UserService {
         return userDto;
     }
 
+    public List<User> getUsersByCompany(Company company) {
+        List<User> users = userRepository.findByProjects_Company_Id(company.id);
+        return users;
+    }
 }
 

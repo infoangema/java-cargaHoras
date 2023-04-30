@@ -33,7 +33,7 @@ public class Project implements Serializable {
     @NotBlank(message = Messages.ERROR_NULL_DESCRIPTION)
     public String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     public Company company;
 
@@ -41,6 +41,4 @@ public class Project implements Serializable {
     public List<User> users = new ArrayList<>();
 
     public boolean status;
-
-
 }

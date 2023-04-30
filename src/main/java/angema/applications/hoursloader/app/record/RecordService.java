@@ -1,17 +1,23 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.company.Company;
+import angema.applications.hoursloader.app.company.CompanyRepository;
+import angema.applications.hoursloader.app.pdf.PdfService;
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.app.project.ProjectService;
 import angema.applications.hoursloader.app.user.User;
+import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
 import angema.applications.hoursloader.core.utils.DateUtil;
+import angema.applications.hoursloader.core.utils.EmailSenderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +35,16 @@ public class RecordService {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
+    private PdfService pdfService;
+
+    @Autowired
+    private EmailSenderUtil emailSenderUtil;
+
 
     @Autowired
     private DateUtil dateUtil;
@@ -159,6 +175,9 @@ public class RecordService {
 
     public RecordDto getRecordDtoByUserIdAndRecorId(Long userId, Long recorId) {
         Record record = recordRepository.findByIdAndUserId(recorId, userId);
+        if( record == null) {
+            throw new RecordException("Registro no encontrado");
+        }
         RecordDto recordDto = new RecordDto();
         recordDto.id = record.id;
         recordDto.date = record.date;
@@ -207,5 +226,34 @@ public class RecordService {
     }
 
 
+    public List<Company> findAllCompaniesBySendEmail() {
+        return companyRepository.findAllBySendEmailTrue();
+    }
+
+    public String sendEmail(long userId) {
+        UserDto user = userService.getUserDtoById(userId);
+        List<RecordDto> recordDtoList = getRecordDtoByUserId(userId);
+        if(recordDtoList.size() == 0){
+            throw new RecordException("No hay registros para enviar");
+        }
+        Long companyId = projectService.findCompanyByProjectId(recordDtoList.get(0).project.id);
+        List<String> emails = findEmailsById(companyId);
+        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getLastMonthWithYearString(recordDtoList.get(0).date);
+        String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);
+        return res;
+    }
+
+    public List<String> findEmailsById(Long id) {
+        return recordRepository.findEmailsById(id);
+    }
+
+    public void sendEmailAdmin(List<String> errors) {
+        try {
+            String emailString = String.join(",", errors);
+            emailSenderUtil.sendEmailMsg(emailString);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 

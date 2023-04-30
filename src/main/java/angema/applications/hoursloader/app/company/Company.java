@@ -3,11 +3,15 @@ package angema.applications.hoursloader.app.company;
 import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,4 +41,13 @@ public class Company implements Serializable {
     @Size(min = Constant.MIN_CHARACTER_DIRECTION, max = Constant.MAX_CHARACTER_DIRECTION, message = Messages.ERROR_DIRECTION)
     @NotBlank(message = Messages.ERROR_NULL_DIRECTION)
     public String direction;
+
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    @CollectionTable(name="emails_company", joinColumns=@JoinColumn(name="company_id"))
+    @Column(name="email")
+    public List<String> emails = new ArrayList<>();
+
+    @Column(name="send_email", columnDefinition = "boolean default false")
+    public boolean sendEmail;
 }

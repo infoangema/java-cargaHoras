@@ -28,9 +28,6 @@ public class PdfService {
     private RecordService recordService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private DateUtil dateUtil;
 
     public byte[] createInforme(UserDto user, List<RecordDto> recordList) {
@@ -53,11 +50,11 @@ public class PdfService {
         }
     }
 
-    public String sendEmailByUser(UserDto user, List<RecordDto> records) {
+    public String sendEmailByUser(UserDto user, List<RecordDto> records, List<String> emails, String msg) {
         try {
-            String filename = records.get(0).project.description + ".pdf";
+            String filename = records.get(0).project.description;
             byte[] pdf = createInforme(user, records);
-            emailSenderUtil.sendEmailWithAttachmentFromByteArray(pdf, filename);
+            emailSenderUtil.sendEmailWithAttachmentFromByteArray(pdf, filename, emails, msg);
             return "Email enviado: " + filename;
         } catch (Exception e) {
             throw new RuntimeException(e);

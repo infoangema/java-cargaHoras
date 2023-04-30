@@ -1,21 +1,19 @@
 package angema.applications.hoursloader.app.record;
 
+import angema.applications.hoursloader.app.company.CompanyRepository;
 import angema.applications.hoursloader.app.pdf.PdfService;
+import angema.applications.hoursloader.app.project.ProjectRepository;
 import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
-import angema.applications.hoursloader.core.exceptions.ExceptionService;
-import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
-import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
+import angema.applications.hoursloader.core.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/records")
 public class RecordController {
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private RecordService recordService;
@@ -37,6 +39,9 @@ public class RecordController {
 
     @Autowired
     private PdfService pdfService;
+
+    @Autowired
+    private DateUtil dateUtil;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -117,14 +122,15 @@ public class RecordController {
 
     @DeleteMapping("/delete/by-user-id/{userId}/record-id/{recorId}")
     @PreAuthorize("hasRole('ROLE_DEVS')")
-    public String deleteByUserId(@PathVariable("userId") Long userId, @PathVariable("recorId") Long recorId) {
+    public RecordResponse deleteByUserId(@PathVariable("userId") Long userId, @PathVariable("recorId") Long recorId) {
         RecordDto recordDto = recordService.getRecordDtoByUserIdAndRecorId(userId, recorId);
         recordService.deleteRecord(recordDto);
-        return "DELETE";
+
+        return new RecordResponse("DELETE");
     }
     @GetMapping(value = "/download-pdf-by-user-id/{userId}", produces = "application/pdf")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
-    public ResponseEntity<byte[]> downloadPdf(@PathVariable long userId) {
+    public byte[] downloadPdf(@PathVariable long userId) {
         UserDto user = userService.getUserDtoById(userId);
         List<RecordDto> recordDtoList = recordService.findRecordsDtoByCurrentMonth(userId);
         byte[] pdf = pdfService.createInforme(user, recordDtoList);
@@ -134,7 +140,7 @@ public class RecordController {
         headers.setContentDisposition(ContentDisposition.builder("inline").filename("informe.pdf").build());
         headers.setContentLength(pdf.length);
 
-        return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+        return pdf;
     }
 
     @GetMapping("/send-email-by-user-id/{userId}")
@@ -142,7 +148,10 @@ public class RecordController {
     public String sendEmail(@PathVariable long userId) {
         UserDto user = userService.getUserDtoById(userId);
         List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
-        String res = pdfService.sendEmailByUser(user, recordDtoList);
+        Long companyId = projectRepository.findCompanyByProjectId(recordDtoList.get(0).project.id);
+        List<String> emails = recordService.findEmailsById(companyId);
+        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getLastMonthWithYearString(recordDtoList.get(0).date);
+        String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);
         return res;
     }
 

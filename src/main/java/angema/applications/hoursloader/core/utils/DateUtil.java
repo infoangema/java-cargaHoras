@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -57,5 +60,40 @@ public class DateUtil {
             strNow = simpleDateFormat().parse(strDate);
         } catch (ParseException ignored) {}
         return strNow.getTime();
+    }
+
+    public String getLastMonthWithYearString(String dateString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+            Date date = dateFormat.parse(dateString);
+
+            // Convertir la fecha a LocalDate
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Obtener el mes anterior
+            localDate = localDate.minusMonths(1);
+
+            // Formatear la fecha en el formato deseado
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+            String formattedDate = localDate.format(formatter);
+
+            return formattedDate;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public String getMonthWihtYearString(String dateString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+            Date date = dateFormat.parse(dateString);
+            dateFormat.applyPattern("MM/yyyy");
+            return dateFormat.format(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

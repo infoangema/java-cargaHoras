@@ -34,7 +34,9 @@ public class GlobalResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return !returnType.getMethod().getName().contains("Exception");
+        boolean isException = returnType.getMethod().getName().contains("Exception");
+        boolean isByte = byte[].class.isAssignableFrom(returnType.getParameterType());
+        return !isException && !isByte;
     }
 
     @Override
@@ -115,7 +117,7 @@ public class GlobalResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globleExcpetionHandler(Exception ex) {
+    public ResponseEntity<?> exceptionHandler(Exception ex) {
         GlobalResponse response = new GlobalResponse();
         response.status = HttpStatus.INTERNAL_SERVER_ERROR;
         response.path = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI();

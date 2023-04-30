@@ -1,6 +1,5 @@
 package angema.applications.hoursloader.app.company;
 
-import angema.applications.hoursloader.app.project.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +10,5 @@ public interface CompanyRepository extends JpaRepository <Company, Long> {
 
     List<Company> findAllByOrderByIdAsc();
 
+    List<Company> findAllBySendEmailTrue();
 }

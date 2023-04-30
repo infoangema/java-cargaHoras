@@ -88,5 +88,8 @@ public class ProjectService {
         return projectDto;
     }
 
+    public Long findCompanyByProjectId(Long id) {
+        return projectRepository.findCompanyByProjectId(id);
+    }
 }
 
