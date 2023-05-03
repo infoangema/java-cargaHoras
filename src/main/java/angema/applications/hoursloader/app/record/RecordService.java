@@ -214,6 +214,20 @@ public class RecordService {
         }
     }
 
+    public List<RecordDto> findRecordsDtoByPreviousMonth(Long userId) {
+        try {
+            List<Record> records = recordRepository.findRecordsByUserIdAndPreviousMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+            List<RecordDto> recordDtos = new ArrayList<>();
+            records.forEach(record -> {
+                record.date = dateUtil.getDayMonthString(record.date);
+                recordDtos.add(mapRecordToDto(record));
+            });
+            return recordDtos;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
     public Integer getCountRecordsByUserId(Long userId) {
         return recordRepository.countRecordsByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
     }

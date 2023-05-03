@@ -128,7 +128,7 @@ public class RecordController {
 
         return new RecordResponse("DELETE");
     }
-    @GetMapping(value = "/download-pdf-by-user-id/{userId}", produces = "application/pdf")
+    @GetMapping(value = "/download-pdf-by-user-id/{userId}/current", produces = "application/pdf")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
     public byte[] downloadPdf(@PathVariable long userId) {
         UserDto user = userService.getUserDtoById(userId);
@@ -142,6 +142,22 @@ public class RecordController {
 
         return pdf;
     }
+
+    @GetMapping(value = "/download-pdf-by-user-id/{userId}/previous", produces = "application/pdf")
+    @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
+    public byte[] downloadPreviousPdf(@PathVariable long userId) {
+        UserDto user = userService.getUserDtoById(userId);
+        List<RecordDto> recordDtoList = recordService.findRecordsDtoByPreviousMonth(userId);
+        byte[] pdf = pdfService.createInforme(user, recordDtoList);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("informe.pdf").build());
+        headers.setContentLength(pdf.length);
+
+        return pdf;
+    }
+
 
     @GetMapping("/send-email-by-user-id/{userId}")
     @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
