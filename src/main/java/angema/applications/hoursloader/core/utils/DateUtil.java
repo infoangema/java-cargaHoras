@@ -62,7 +62,7 @@ public class DateUtil {
         return strNow.getTime();
     }
 
-    public String getLastMonthWithYearString(String dateString) {
+    public String getPreviousMonthWithYearString(String dateString) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
@@ -73,6 +73,25 @@ public class DateUtil {
 
             // Obtener el mes anterior
             localDate = localDate.minusMonths(1);
+
+            // Formatear la fecha en el formato deseado
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+            String formattedDate = localDate.format(formatter);
+
+            return formattedDate;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getCurrentMonthWithYearString(String dateString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+            Date date = dateFormat.parse(dateString);
+
+            // Convertir la fecha a LocalDate
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             // Formatear la fecha en el formato deseado
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");

@@ -37,7 +37,7 @@ public class PdfService {
             informe.project = user.projects.get(0);
             informe.records = recordList;
             informe.hours = recordService.getTotalHours(recordList);
-            informe.date = dateUtil.getMonthYearNameString();
+            informe.date = dateUtil.getCurrentMonthWithYearString(recordList.get(0).date+ "-2023");
             informe.description = user.projects.get(0).description;
             Map<String, PdfInformeDto> data = new HashMap<>();
             data.put("informe", informe);

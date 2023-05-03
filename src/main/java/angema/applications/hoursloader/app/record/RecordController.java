@@ -166,7 +166,7 @@ public class RecordController {
         List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
         Long companyId = projectRepository.findCompanyByProjectId(recordDtoList.get(0).project.id);
         List<String> emails = recordService.findEmailsById(companyId);
-        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getLastMonthWithYearString(recordDtoList.get(0).date);
+        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString(recordDtoList.get(0).date);
         String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);
         return res;
     }

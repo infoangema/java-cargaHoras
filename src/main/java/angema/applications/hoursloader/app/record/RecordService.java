@@ -219,6 +219,7 @@ public class RecordService {
             List<Record> records = recordRepository.findRecordsByUserIdAndPreviousMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
             List<RecordDto> recordDtos = new ArrayList<>();
             records.forEach(record -> {
+                // todo: quitar hardcode de fecha.
                 record.date = dateUtil.getDayMonthString(record.date);
                 recordDtos.add(mapRecordToDto(record));
             });
@@ -252,7 +253,7 @@ public class RecordService {
         }
         Long companyId = projectService.findCompanyByProjectId(recordDtoList.get(0).project.id);
         List<String> emails = findEmailsById(companyId);
-        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getLastMonthWithYearString(recordDtoList.get(0).date);
+        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString(recordDtoList.get(0).date);
         String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);
         return res;
     }
