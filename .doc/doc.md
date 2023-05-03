@@ -1,6 +1,17 @@
-java -jar -Djasypt.encryptor.password="GerrDevs9003...."
+java -jar -Djasypt.encryptor.password="GerrDevs9003....|.."
+mvn jasypt:decrypt-value -Djasypt.encryptor.password="GerrDevs9003....|.." -Djasypt.plugin.value="GL9Lqyj01G02tuEYpotOsaG/8g80Ca/OVh1lO0SWBUEYl4A9uewlQ9s1bmbgKBV4"
+
 sudo idea /etc/nginx/sites-available/default
-java "-Dspring.profiles.active=prod" "-Djasypt.encryptor.password=GerrDevs9003...." -jar hours-version-.0.0.1-port-8090.jar
+
+cd /home/admdevs/Escritorio/devs/java/java-cargaHoras/target
+java "-Dspring.profiles.active=prod" "-Djasypt.encryptor.password=GerrDevs9003...." -jar hours-version-0.0.1-port-8090.jar
+java "-Dspring.profiles.active=prod" "-Djasypt.encryptor.password=GerrDevs9003...." -jar hours-backend.jar
+
+sudo nano /etc/systemd/system/hours-backend.service
+ExecStart=/usr/bin/java -jar /home/admdevs/Escritorio/devs/java/java-cargaHoras/.prod/hours-backend.jar -Dspring.profiles.active=prod -Djasypt.encryptor.password=GerrDevs9003....
+sudo systemctl daemon-reload
+sudo systemctl enable hours-backend.service
+sudo systemctl start hours-backend.service
 
 
 ```
