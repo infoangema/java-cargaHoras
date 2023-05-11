@@ -53,6 +53,13 @@ public class DateUtil {
         }
     }
 
+    public String getDateStringFormatDdMmYyyy(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+        dateFormat.applyPattern("dd-MM-yyyy");
+        return dateFormat.format(date);
+    }
+
     public long getDateMillis() {
         String strDate = simpleDateFormat().format(new Date());
         Date strNow = new Date();
