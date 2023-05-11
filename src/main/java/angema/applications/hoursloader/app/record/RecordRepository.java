@@ -38,6 +38,26 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "ORDER BY date ASC", nativeQuery = true)
     Optional<List<Date>> findMissingDatesByUserIdAndMonth(Long userId);
 
+    @Query(value = "SELECT DISTINCT to_char(d.date, 'DD-MM-YYYY') AS date\n" +
+            "FROM generate_series(\n" +
+            " date_trunc('month', current_date),\n" +
+            " date_trunc('month', current_date) + interval '1 month - 1 day',\n" +
+            " interval '1 day'\n" +
+            " ) d\n" +
+            "WHERE d.date <= current_date\n" +
+            " AND d.date >= date_trunc('month', current_date)\n" +
+            " AND NOT EXISTS (\n" +
+            " SELECT 1\n" +
+            " FROM record\n" +
+            " WHERE user_id = ?1" +
+            " AND date_trunc('day', to_date(date, 'DD-MM-YYYY')) = d.date\n" +
+            " )\n" +
+            " AND EXTRACT(DOW FROM d.date) NOT IN (0,6)\n" +
+            "ORDER BY date ASC", nativeQuery = true)
+    Optional<List<String>> findMissingDatesByUserIdAndMonthAsStringFormat(Long userId);
+
+    Record findByDateAndUser_id( String date, Long userId);
+
     @Query(value = "SELECT * FROM record WHERE user_id = ?1 AND date_trunc('month', to_date(date, 'DD-MM-YYYY')) = date_trunc('month', now()) ORDER BY to_date(date, 'DD-MM-YYYY') DESC", nativeQuery = true)
     Optional<List<Record>> findRecordsByUserIdAndCurrentMonth(Long userId);
 
