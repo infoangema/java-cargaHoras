@@ -42,6 +42,17 @@ public class UserService {
         }
     }
 
+    public List<UserDto> getAllUserToSendTelegramMsg() {
+        try {
+            List<User> users = userRepository.findByActiveTelegramIsTrue();
+            List<UserDto> usersDto = new ArrayList<>();
+            users.forEach(user -> usersDto.add(mapUserToDto(user)));
+            return usersDto;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
     public UserDto getUserDtoById(final Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException("Usuario no encontrado: " + id));
         return mapUserToDto(user);
@@ -105,6 +116,8 @@ public class UserService {
             projectDto.company = companyService.mapCompanyToDto(project.company);
             userDto.projects.add(projectDto);
         });
+        userDto.telegramUserId = user.telegramUserId;
+        userDto.activeTelegram = user.activeTelegram;
 
         return userDto;
     }

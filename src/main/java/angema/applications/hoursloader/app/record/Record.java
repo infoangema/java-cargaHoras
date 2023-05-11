@@ -5,6 +5,7 @@ import angema.applications.hoursloader.core.Constant;
 import angema.applications.hoursloader.core.Messages;
 import angema.applications.hoursloader.app.project.Project;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,12 +19,12 @@ import java.io.Serializable;
 public class Record implements Serializable {
 
     @Id
-@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGA_HORAS_SEQUENCE")
-@SequenceGenerator(name = "CARGA_HORAS_SEQUENCE", sequenceName = "CARGA_HORAS_SEQUENCE", allocationSize = 1)
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGA_HORAS_SEQUENCE")
+    @SequenceGenerator(name = "CARGA_HORAS_SEQUENCE", sequenceName = "CARGA_HORAS_SEQUENCE", allocationSize = 1)
     public Long id;
 
     @NotBlank(message = Messages.ERROR_NULL_DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     public String date;
 
     @Pattern(regexp = "[0-9]+", message = Messages.ERROR_FORMAT_HOURS)

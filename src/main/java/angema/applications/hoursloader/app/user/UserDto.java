@@ -20,4 +20,6 @@ public class UserDto {
     public String phone;
     public boolean active = true;
     public List<ProjectDto> projects = new ArrayList<>();
+    public Boolean activeTelegram;
+    public String telegramUserId;
 }

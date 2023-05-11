@@ -41,4 +41,7 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "projects_id"))
     public List<Project> projects = new ArrayList<>();
 
+    public Boolean activeTelegram = true;
+    public String telegramUserId;
+
 }
