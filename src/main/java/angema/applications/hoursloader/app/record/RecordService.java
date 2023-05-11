@@ -200,6 +200,17 @@ public class RecordService {
         return recordRepository.findMissingDatesByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
     }
 
+    // feat: Obtiene los dias no cargados por usuario en formato 'dd/MM/yyyy'
+    public List<String> getMissingDaysString(Long userId) {
+        return recordRepository.findMissingDatesByUserIdAndMonthAsStringFormat(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+    }
+
+
+    // feat: Obtiene registro por fecha en formato 'dd-MM-yyyy'
+    public Record getRecordByDate(Long userId, String date) {
+        return recordRepository.findByDateAndUser_id(date, userId);
+    }
+
     public List<RecordDto> findRecordsDtoByCurrentMonth(Long userId) {
         try {
             List<Record> records = recordRepository.findRecordsByUserIdAndCurrentMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
