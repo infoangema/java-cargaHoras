@@ -1,7 +1,5 @@
 package angema.applications.hoursloader.app.company;
 import angema.applications.hoursloader.core.exceptions.ExceptionService;
-import angema.applications.hoursloader.core.globalResponse.GlobalResponse;
-import angema.applications.hoursloader.core.globalResponse.GlobalResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,8 +42,6 @@ public class CompanyController {
         return companyDto;
     }
 
-
-
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CompanyDto delete(@PathVariable("id") Long id) {
@@ -56,7 +52,7 @@ public class CompanyController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CompanyDto update(@RequestBody CompanyDto data, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public CompanyDto update(@RequestBody CompanyDto data, @PathVariable("id") Long id) {
         CompanyDto companyDto = companyService.getCompanyDtoById(id);
         data.id = companyDto.id;
         data = companyService.saveCompany(data);

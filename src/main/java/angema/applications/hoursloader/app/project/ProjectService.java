@@ -1,7 +1,6 @@
 package angema.applications.hoursloader.app.project;
 
 
-import angema.applications.hoursloader.app.company.CompanyDto;
 import angema.applications.hoursloader.app.user.UserService;
 import angema.applications.hoursloader.core.Messages;
 import lombok.extern.slf4j.Slf4j;
@@ -88,8 +87,12 @@ public class ProjectService {
         return projectDto;
     }
 
-    public Long findCompanyByProjectId(Long id) {
-        return projectRepository.findCompanyByProjectId(id);
+    public Long findCompanyIdByProjectId(Long id) {
+        return projectRepository.findCompanyIdByProjectId(id);
+    }
+
+    public List<Project> findProjectByUserId(Long id) {
+        return projectRepository.findAllByUsersId(id);
     }
 }
 

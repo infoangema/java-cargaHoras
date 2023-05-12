@@ -6,18 +6,16 @@ import angema.applications.hoursloader.app.company.CompanyService;
 import angema.applications.hoursloader.app.project.Project;
 import angema.applications.hoursloader.app.project.ProjectDto;
 import angema.applications.hoursloader.app.project.ProjectRepository;
-import angema.applications.hoursloader.app.user.dtos.RoleDto;
 import angema.applications.hoursloader.core.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -125,6 +123,11 @@ public class UserService {
     public List<User> getUsersByCompany(Company company) {
         List<User> users = userRepository.findByProjects_Company_Id(company.id);
         return users;
+    }
+
+    @Transactional
+    public void setActiveTelegramStatus(Long userId, Boolean active) {
+        userRepository.setActiveTelegramStatus(userId, active);
     }
 }
 

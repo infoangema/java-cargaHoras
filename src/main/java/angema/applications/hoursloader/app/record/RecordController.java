@@ -164,7 +164,7 @@ public class RecordController {
     public String sendEmail(@PathVariable long userId) {
         UserDto user = userService.getUserDtoById(userId);
         List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
-        Long companyId = projectRepository.findCompanyByProjectId(recordDtoList.get(0).project.id);
+        Long companyId = projectRepository.findCompanyIdByProjectId(recordDtoList.get(0).project.id);
         List<String> emails = recordService.findEmailsById(companyId);
         String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString(recordDtoList.get(0).date);
         String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);

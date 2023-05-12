@@ -225,6 +225,15 @@ public class RecordService {
         }
     }
 
+    public Integer findTotalsHoursForCurrentMonth(Long userId) {
+        try {
+            Optional<Integer> sumOpt = recordRepository.findTotalHoursByUserIdAndCurrentMonth(userId);
+            return sumOpt.orElse(0);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+        }
+    }
+
     public List<RecordDto> findRecordsDtoByPreviousMonth(Long userId) {
         try {
             List<Record> records = recordRepository.findRecordsByUserIdAndPreviousMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
@@ -262,7 +271,7 @@ public class RecordService {
         if(recordDtoList.size() == 0){
             throw new RecordException("No hay registros para enviar");
         }
-        Long companyId = projectService.findCompanyByProjectId(recordDtoList.get(0).project.id);
+        Long companyId = projectService.findCompanyIdByProjectId(recordDtoList.get(0).project.id);
         List<String> emails = findEmailsById(companyId);
         String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString(recordDtoList.get(0).date);
         String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);

@@ -61,6 +61,9 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(value = "SELECT * FROM record WHERE user_id = ?1 AND date_trunc('month', to_date(date, 'DD-MM-YYYY')) = date_trunc('month', now()) ORDER BY to_date(date, 'DD-MM-YYYY') DESC", nativeQuery = true)
     Optional<List<Record>> findRecordsByUserIdAndCurrentMonth(Long userId);
 
+    @Query(value = "SELECT SUM(CAST(hours AS INTEGER)) AS totalHours FROM record WHERE user_id = ?1 AND date_trunc('month', to_date(date, 'DD-MM-YYYY')) = date_trunc('month', now())", nativeQuery = true)
+    Optional<Integer> findTotalHoursByUserIdAndCurrentMonth(Long userId);
+
     @Query(value = "SELECT * FROM record WHERE user_id = ?1 AND date_trunc('month', to_date(date, 'DD-MM-YYYY')) = date_trunc('month', now() - interval '1 month') ORDER BY to_date(date, 'DD-MM-YYYY') DESC", nativeQuery = true)
     Optional<List<Record>> findRecordsByUserIdAndPreviousMonth(Long userId);
 
