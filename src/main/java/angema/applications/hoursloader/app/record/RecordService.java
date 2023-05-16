@@ -197,7 +197,8 @@ public class RecordService {
     }
 
     public List<Date> getMissingDays(Long userId) {
-        return recordRepository.findMissingDatesByUserIdAndMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+        return recordRepository.findMissingDatesByUserIdAndMonth(userId)
+                .orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
     }
 
     // feat: Obtiene los dias no cargados por usuario en formato 'dd/MM/yyyy'
@@ -211,9 +212,11 @@ public class RecordService {
         return recordRepository.findByDateAndUser_id(date, userId);
     }
 
+    // DOC: Obtiene los registros del mes actual que el usuario no cargo.
     public List<RecordDto> findRecordsDtoByCurrentMonth(Long userId) {
         try {
-            List<Record> records = recordRepository.findRecordsByUserIdAndCurrentMonth(userId).orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
+            List<Record> records = recordRepository.findRecordsByUserIdAndCurrentMonth(userId)
+                    .orElseThrow(() -> new RecordException("Error al intentar obtener los registros del user: " + userId));
             List<RecordDto> recordDtos = new ArrayList<>();
             records.forEach(record -> {
                 record.date = dateUtil.getDayMonthString(record.date);
@@ -289,6 +292,14 @@ public class RecordService {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean arePreviousMonthRecordsComplete(Long id, Long id1) {
+        return recordRepository.arePreviousMonthRecordsComplete(id, id1);
+    }
+
+    public int getMissingRecordsCount(Long id, Long id1) {
+        return recordRepository.getMissingRecordsCount(id, id1);
     }
 }
 

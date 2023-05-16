@@ -1,9 +1,11 @@
 package angema.applications.hoursloader.app.pdf;
 
+import angema.applications.hoursloader.app.administration.AdministrationService;
 import angema.applications.hoursloader.app.record.RecordDto;
 import angema.applications.hoursloader.app.record.RecordService;
 import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
+import angema.applications.hoursloader.core.globalResponse.GlobalResponseStringWrapper;
 import angema.applications.hoursloader.core.utils.DateUtil;
 import angema.applications.hoursloader.core.utils.EmailSenderUtil;
 import angema.applications.hoursloader.core.utils.PdfGenaratorUtil;
@@ -26,6 +28,9 @@ public class PdfService {
 
     @Autowired
     private RecordService recordService;
+
+    @Autowired
+    private AdministrationService administrationService;
 
     @Autowired
     private DateUtil dateUtil;
@@ -52,10 +57,13 @@ public class PdfService {
 
     public String sendEmailByUser(UserDto user, List<RecordDto> records, List<String> emails, String msg) {
         try {
-            String filename = records.get(0).project.description;
-            byte[] pdf = createInforme(user, records);
-            emailSenderUtil.sendEmailWithAttachmentFromByteArray(pdf, filename, emails, msg);
-            return "Email enviado: " + filename;
+            String filenameDetalles = records.get(0).project.description;
+            byte[] pdfDetalles = createInforme(user, records);
+            String filenameFactura = "Factura " + filenameDetalles + " - mes " + dateUtil.getPreviousMonthWithYearString();
+            byte[] pdfFactura = administrationService.getFacturaByUserId(user.id, records.get(0).project.id);
+
+            emailSenderUtil.sendEmailWithAttachmentFromByteArray(pdfDetalles, filenameDetalles, pdfFactura, filenameFactura , emails, msg);
+            return "Email enviado: " + filenameDetalles;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.List;
 
 @Component
@@ -36,7 +37,7 @@ public class EmailSenderUtil {
         emailSender.send(message);
     }
 
-    public void sendEmailWithAttachmentFromByteArray(byte[] pdfBytes, String filename, List<String> emails, String msg) throws MessagingException {
+    public void sendEmailWithAttachmentFromByteArray(byte[] pdfBytes, String filename,byte[] pdfFactura, String filenameFactura, List<String> emails, String msg) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         String emailString = String.join(",", emails);
@@ -46,8 +47,10 @@ public class EmailSenderUtil {
         helper.setText(EMAIL_MSG);
 
         ByteArrayResource file = new ByteArrayResource(pdfBytes);
+        ByteArrayResource file2 = new ByteArrayResource(pdfFactura);
 
         helper.addAttachment(filename + ".pdf", file);
+        helper.addAttachment(filenameFactura + ".pdf", file2);
 
         emailSender.send(message);
     }

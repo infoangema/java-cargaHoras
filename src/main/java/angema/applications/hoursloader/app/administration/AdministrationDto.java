@@ -17,6 +17,8 @@ public class AdministrationDto {
     public Boolean useTelegram;
     public Boolean incomeFileStatus;
     public Boolean billFileStatus;
+    public Boolean completedHours = false;
+    public Boolean uploadActualBillFile = false;
     public Long projectId;
     public String projectName;
     public Long companyId;

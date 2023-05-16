@@ -5,6 +5,7 @@ import angema.applications.hoursloader.app.pdf.PdfService;
 import angema.applications.hoursloader.app.project.ProjectRepository;
 import angema.applications.hoursloader.app.user.UserDto;
 import angema.applications.hoursloader.app.user.UserService;
+import angema.applications.hoursloader.core.globalResponse.GlobalResponseStringWrapper;
 import angema.applications.hoursloader.core.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,17 +159,18 @@ public class RecordController {
         return pdf;
     }
 
-
-    @GetMapping("/send-email-by-user-id/{userId}")
-    @PreAuthorize("hasRole('ROLE_DEVS') || hasRole('ROLE_ADMIN')")
-    public String sendEmail(@PathVariable long userId) {
+    @GetMapping("/send-email-by/user-id/{userId}/project-id/{projectId}/send-email")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GlobalResponseStringWrapper sendEmail(@PathVariable long userId, @PathVariable long projectId) {
+        GlobalResponseStringWrapper response = new GlobalResponseStringWrapper();
         UserDto user = userService.getUserDtoById(userId);
         List<RecordDto> recordDtoList = recordService.getRecordDtoByUserId(userId);
-        Long companyId = projectRepository.findCompanyIdByProjectId(recordDtoList.get(0).project.id);
+        Long companyId = projectRepository.findCompanyIdByProjectId(projectId);
         List<String> emails = recordService.findEmailsById(companyId);
-        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString(recordDtoList.get(0).date);
+        String msg = "Angema - " + recordDtoList.get(0).project.description + " - " + dateUtil.getPreviousMonthWithYearString();
         String res = pdfService.sendEmailByUser(user, recordDtoList, emails, msg);
-        return res;
+        response.description = res;
+        return response;
     }
 
 }

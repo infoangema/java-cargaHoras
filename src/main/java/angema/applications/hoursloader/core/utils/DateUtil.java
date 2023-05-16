@@ -122,4 +122,27 @@ public class DateUtil {
             throw new RuntimeException(e);
         }
     }
+
+    // crear metodo que devuelve fecha en formtato MM-yyyy del mes anterior
+    public String getPreviousMonthWithYearString() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+            Date date = new Date();
+
+            // Convertir la fecha a LocalDate
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Obtener el mes anterior
+            localDate = localDate.minusMonths(1);
+
+            // Formatear la fecha en el formato deseado
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy");
+            String formattedDate = localDate.format(formatter);
+
+            return formattedDate;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

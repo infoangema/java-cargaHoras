@@ -2,6 +2,7 @@ package angema.applications.hoursloader.app.record;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -54,6 +55,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             " )\n" +
             " AND EXTRACT(DOW FROM d.date) NOT IN (0,6)\n" +
             "ORDER BY date ASC", nativeQuery = true)
+    // DOC: Obtiene los dias no cargados por usuario en formato String 'dd/MM/yyyy'
     Optional<List<String>> findMissingDatesByUserIdAndMonthAsStringFormat(Long userId);
 
     Record findByDateAndUser_id( String date, Long userId);
@@ -75,5 +77,30 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     @Query(value = "SELECT e.email FROM  company c left join emails_company e on c.id = e.company_id WHERE c.id = :id", nativeQuery = true)
     List<String> findEmailsById(Long id);
+
+    // DOC: Verificar si los registros del mes anterior estan completos.
+    @Query(value = "SELECT CASE WHEN COUNT(*) = COUNT(CASE WHEN date IS NOT NULL THEN 1 END) THEN true ELSE false END " +
+            "FROM Record " +
+            "WHERE user_id = :userId " +
+            "AND project_id = :projectId " +
+            "AND EXTRACT(MONTH FROM TO_DATE(date, 'dd-MM-yyyy')) = EXTRACT(MONTH FROM CURRENT_DATE - INTERVAL '1 month') " +
+            "AND EXTRACT(YEAR FROM TO_DATE(date, 'dd-MM-yyyy')) = EXTRACT(YEAR FROM CURRENT_DATE - INTERVAL '1 month') " +
+            "AND EXTRACT(DOW FROM TO_DATE(date, 'dd-MM-yyyy')) NOT IN (0, 6)",
+            nativeQuery = true)
+    boolean arePreviousMonthRecordsComplete(@Param("userId") Long userId,
+                                            @Param("projectId") Long projectId);
+
+    // DOC: Verificar si los registros del mes anterior estan completos.
+    @Query(value = "SELECT COUNT(*) " +
+            "FROM Record " +
+            "WHERE user_id = :userId " +
+            "AND project_id = :projectId " +
+            "AND date IS NULL " +
+            "AND EXTRACT(MONTH FROM TO_DATE(date, 'dd-MM-yyyy')) = EXTRACT(MONTH FROM CURRENT_DATE - INTERVAL '1 month') " +
+            "AND EXTRACT(YEAR FROM TO_DATE(date, 'dd-MM-yyyy')) = EXTRACT(YEAR FROM CURRENT_DATE - INTERVAL '1 month') " +
+            "AND EXTRACT(DOW FROM TO_DATE(date, 'dd-MM-yyyy')) NOT IN (0, 6)",
+            nativeQuery = true)
+    int getMissingRecordsCount(@Param("userId") Long userId,
+                               @Param("projectId") Long projectId);
 
 }
