@@ -15,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -86,9 +86,16 @@ public class RecordService {
             Record record = mapDtoToRecord(recordDto);
             record = recordRepository.save(record);
             return mapRecordToDto(record);
+        } catch(ConstraintViolationException ex) {
+            for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+                String errorMessage = violation.getMessage();
+                String propertyName = violation.getPropertyPath().toString();
+                throw new RecordException(errorMessage);
+            }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, Messages.ERROR_SERVER, e);
+            throw new RecordException(e.getMessage());
         }
+        return recordDto;
     }
 
     public List<String> saveAllRecord(List<RecordDto> recorList) {
@@ -174,10 +181,7 @@ public class RecordService {
     }
 
     public RecordDto getRecordDtoByUserIdAndRecorId(Long userId, Long recorId) {
-        Record record = recordRepository.findByIdAndUserId(recorId, userId);
-        if( record == null) {
-            throw new RecordException("Registro no encontrado");
-        }
+        Record record = recordRepository.findById(recorId).orElseThrow(()-> new RecordException("Registro no encontrado"));
         RecordDto recordDto = new RecordDto();
         recordDto.id = record.id;
         recordDto.date = record.date;

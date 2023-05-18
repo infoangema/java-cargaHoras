@@ -16,11 +16,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@Table(name = "record",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"date", "user_id", "project_id"})
+)
 public class Record implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGA_HORAS_SEQUENCE")
-    @SequenceGenerator(name = "CARGA_HORAS_SEQUENCE", sequenceName = "CARGA_HORAS_SEQUENCE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @NotBlank(message = Messages.ERROR_NULL_DATE)
